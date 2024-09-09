@@ -116,14 +116,14 @@ A full reference on the UI-KIT html tags and attributes and Javascript framework
 
 &nbsp;
 
-# Quick start guide <span id="quick-start" />^<span style="font-size:8pt;">[top](#toc "table of contents")</span>^
+# Quick start guide <span id="quick-start" /><sup><span style="font-size:8pt;">[top](#toc "table of contents")</span></sup>
 In this section we will build a simple single-page web application in a step-by-step fashion while introducing the basic concepts of building an app with UI-KIT.
 At the end of this section you will have a functioning web-application with a heading component, a navigation panel component, and a couple of content components that are displayed conditionally depending on the current url.
 
 &nbsp;  
 
 ---
-## Step 1: The index page <span id="quick-start-1" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [next](#quick-start-2 "component html templates")</span>^
+## Step 1: The index page <span id="quick-start-1" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [next](#quick-start-2 "component html templates")</span></sup>
 ---
 With a single-page web application there is just one page: index.html.
 Your application will dynamically modify the html content of this page based on things like user input and navigation actions.
@@ -196,7 +196,7 @@ You should see a page with a heading that reads "Hello UI-KIT!".
 &nbsp;  
 
 ---
-## Step 2: Component HTML templates <span id="quick-start-2" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [prev](#quick-start-1 "the index page") | [next](#quick-start-3 "component javascript models")</span>^
+## Step 2: Component HTML templates <span id="quick-start-2" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [prev](#quick-start-1 "the index page") | [next](#quick-start-3 "component javascript models")</span></sup>
 ---
 Now that we have our initial html content and can see it in the browser, let's start using UI-KIT to break our app into components.
 We're going to add 3 components in this step: a heading component, a navigation panel component, and a content component.  
@@ -392,7 +392,7 @@ After saving your changes and refreshing your browser, you should see a page wit
 &nbsp;  
 
 ---
-## Step 3: Component Javascript models <span id="quick-start-3" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [prev](#quick-start-2 "component html templates") | [next](#quick-start-4 "conditional rendering")</span>^
+## Step 3: Component Javascript models <span id="quick-start-3" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [prev](#quick-start-2 "component html templates") | [next](#quick-start-4 "conditional rendering")</span></sup>
 ---
 So far we've learned how to make simple components (and style them).
 But components become much more flexible and useful when we can run javascript code in response to user interactions or when rendering the content of the component.
@@ -535,7 +535,7 @@ There's a little more to learn about UI-KIT javascript models, but we'll cover t
 &nbsp;  
 
 ---
-## Step 4: Conditional rendering <span id="quick-start-4" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [prev](#quick-start-3 "component javascript models") | [next](#quick-start-5 "looping")</span>^
+## Step 4: Conditional rendering <span id="quick-start-4" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [prev](#quick-start-3 "component javascript models") | [next](#quick-start-5 "looping")</span></sup>
 ---
 In this step, we'll learn how to conditionally render html content using the `<kit-if>` tag.
 For this step, we'll add a "currentSection" property to our content component model and use it to conditionally render only the "current content section" of our template.
@@ -581,7 +581,7 @@ The html inside each `<kit-if>` tag is only rendered if the condition is true.
 &nbsp;  
 
 ---
-## Step 5: Looping <span id="quick-start-5" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [prev](#quick-start-4 "conditional rendering") | [next](#quick-start-6 "navigation")</span>^
+## Step 5: Looping <span id="quick-start-5" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [prev](#quick-start-4 "conditional rendering") | [next](#quick-start-6 "navigation")</span></sup>
 ---
 The `<kit-array>` tag is used to loop over an array of items and render html content for each item in the array.  
 In this step, we'll contrive to extend section 1 in the content component to use the `<kit-array>` tag.  
@@ -626,7 +626,7 @@ See the [\<kit-array>](#reference-html-tags-kit-array "<kit-array>") for more in
 &nbsp;  
 
 ---
-## Step 6: Navigation <span id="quick-start-6" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [prev](#quick-start-5 "looping") | [next](#quick-start-7 "state transitions")</span>^
+## Step 6: Navigation <span id="quick-start-6" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [prev](#quick-start-5 "looping") | [next](#quick-start-7 "state transitions")</span></sup>
 ---
 
 In the previous steps, we learned how to use the `<kit-component>`, `<kit-if>`, and `<kit-array>` tags as building blocks for creating dynamic html content.
@@ -688,7 +688,7 @@ Refreshing the browser, you can now click on the navigation links (or the browse
 &nbsp;  
 
 ---
-## Step 7: State transitions <span id="quick-start-7" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [prev](#quick-start-6 "navigation")</span>^
+## Step 7: State transitions <span id="quick-start-7" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [prev](#quick-start-6 "navigation")</span></sup>
 ---
 It's a common practice to organize large applications into easier to manage components.  
 It's also a common pattern to separate the component's state (or model or data) from its presentation (or view). We see that here in how we separate the javascript model (the state or data) from its html template (the presentation or view). When a component's model changes, the view should be updated as well to reflect the new state.  
@@ -807,7 +807,7 @@ This completes the quick start guide.  I hope you like using UI-KIT.  For additi
 
 &nbsp;
 
-# Reference <span id="reference" />^<span style="font-size:8pt;">[top](#toc "table of contents")</span>^
+# Reference <span id="reference" /><sup><span style="font-size:8pt;">[top](#toc "table of contents")</span></sup>
 The UI-KIT reference is organized into 3 sections:
 - [HTML reference](#reference-html "html reference")
 - [CSS reference](#reference-css "css reference")
@@ -815,7 +815,7 @@ The UI-KIT reference is organized into 3 sections:
 
 &nbsp;
 
-## HTML reference <span id="reference-html" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference "reference")</span>^
+## HTML reference <span id="reference-html" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference "reference")</span></sup>
 The HTML section of the reference is divided into 3 sub-sections:
 - [Tags](#reference-html-tags "html tags")
 - [Attributes](#reference-html-attributes "html attributes")
@@ -823,7 +823,7 @@ The HTML section of the reference is divided into 3 sub-sections:
 
 &nbsp;
 
-### Tags <span id="reference-html-tags" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html "html reference")</span>^
+### Tags <span id="reference-html-tags" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html "html reference")</span></sup>
 This section of the reference covers the 3 special tags used by UI-KIT:
 - [\<kit-array>](#reference-html-tags-kit-array "<kit-array>")
 - [\<kit-component>](#reference-html-tags-kit-component "<kit-component>")
@@ -832,7 +832,7 @@ This section of the reference covers the 3 special tags used by UI-KIT:
 &nbsp;
 
 ---
-#### `<kit-array>` <span id="reference-html-tags-kit-array" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-tags "tags")</span>^
+#### `<kit-array>` <span id="reference-html-tags-kit-array" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-tags "tags")</span></sup>
 The `<kit-array>` tag is used to loop over an array of items and render html content for each item in the array.
 
 > kit-array example:
@@ -863,7 +863,7 @@ The following attributes are specially applicable to the `<kit-array>` tag:
 &nbsp;
 
 ---
-#### `<kit-component>` <span id="reference-html-tags-kit-component" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-tags "tags")</span>^
+#### `<kit-component>` <span id="reference-html-tags-kit-component" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-tags "tags")</span></sup>
 The `<kit-component>` tag is used to define a UI-KIT component and is comprised of an html fragment as a template and (optionally) a javascript model.
 
 > Example 1: `<kit-component>` tag with inline html template:
@@ -900,7 +900,7 @@ The following attributes are specially applicable to the `<kit-component>` tag:
 &nbsp;
 
 ---
-#### `<kit-if>` <span id="reference-html-tags-kit-if" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-tags "tags")</span>^
+#### `<kit-if>` <span id="reference-html-tags-kit-if" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-tags "tags")</span></sup>
 The `<kit-if>` tag is used to conditionally render html elements.
 
 > kit-if example:
@@ -920,7 +920,7 @@ The [data-kit-condition](#reference-html-attributes-data-kit-condition "data-kit
 
 &nbsp;
 
-### Attributes <span id="reference-html-attributes" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html "html reference")</span>^
+### Attributes <span id="reference-html-attributes" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html "html reference")</span></sup>
 This section of the reference covers special html "data-kit" attributes defined by UI-KIT:
 
 - [data-kit-add-attributes](#reference-html-attributes-data-kit-add-attributes "data-kit-add-attributes attribute")
@@ -938,7 +938,7 @@ This section of the reference covers special html "data-kit" attributes defined 
 &nbsp;
 
 ---
-#### data-kit-add-attributes <span id="reference-html-attributes-data-kit-add-attributes" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span>^
+#### data-kit-add-attributes <span id="reference-html-attributes-data-kit-add-attributes" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span></sup>
 `data-kit-add-attributes` contains a comma-separated list of attributes to be added to an element.
 Each attribute in the list may be a name-value pair (separated by an equals sign) or just a name.  
 This attribute is useful for adding attributes at runtime that do not have a value like `checked` or `disabled`.
@@ -958,56 +958,56 @@ The `data-kit-add-attributes` attribute is the preferred method for adding attri
 &nbsp;
 
 ---
-#### data-kit-array <span id="reference-html-attributes-data-kit-array" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span>^
+#### data-kit-array <span id="reference-html-attributes-data-kit-array" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span></sup>
 `data-kit-array` is used to specify the array of items to loop over in a [\<kit-array>](#reference-html-tags-kit-array "<kit-array>") tag.  
 UI-KIT evaluates the value of this attribute as Javascript.
 
 &nbsp;
 
 ---
-#### data-kit-array-ref <span id="reference-html-attributes-data-kit-array-ref" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span>^
+#### data-kit-array-ref <span id="reference-html-attributes-data-kit-array-ref" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span></sup>
 `data-kit-array-ref` contains a label that when prefixed with a hashtag can be used to reference the array being looped over in a [\<kit-array>](#reference-html-tags-kit-array "<kit-array>") tag.  
 Reference attributes (including `data-kit-array-ref`, `data-kit-item-index-ref`, `data-kit-item-ref`, and `data-kit-model-ref`) may not have the same value as a reference attribute defined on a parent component element.  
 
 &nbsp;
 
 ---
-#### data-kit-component-id <span id="reference-html-attributes-data-kit-component-id" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span>^
+#### data-kit-component-id <span id="reference-html-attributes-data-kit-component-id" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span></sup>
 `data-kit-component-id` is an attribute that is automatically added by UI-KIT to each component element when it's corresponding [KitComponent](#reference-javascript-kit-component "KitComponent") instance is created.
  The value of this attribute is the component's unique id.
 
  &nbsp;
 
  ---
-#### data-kit-condition <span id="reference-html-attributes-data-kit-condition" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span>^
+#### data-kit-condition <span id="reference-html-attributes-data-kit-condition" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span></sup>
 `data-kit-condition` is used to specify the boolean condition controlling when a [\<kit-if>](#reference-html-tags-kit-if "<kit-if>") tag's template should be rendered.  
 UI-KIT evaluates the value of this attribute as Javascript.
 
 &nbsp;
 
 ---
-#### data-kit-item-index-ref <span id="reference-html-attributes-data-kit-item-index-ref" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span>^
+#### data-kit-item-index-ref <span id="reference-html-attributes-data-kit-item-index-ref" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span></sup>
 `data-kit-item-index-ref` contains a label that when prefixed with a hashtag can be used to reference the index of an item in the array being looped over in a [\<kit-array>](#reference-html-tags-kit-array "<kit-array>") tag.  
 Reference attributes (including `data-kit-array-ref`, `data-kit-item-index-ref`, `data-kit-item-ref`, and `data-kit-model-ref`) may not have the same value as a reference attribute defined on a parent component element.  
 
 &nbsp;
 
 ---
-#### data-kit-item-ref <span id="reference-html-attributes-data-kit-item-ref" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span>^
+#### data-kit-item-ref <span id="reference-html-attributes-data-kit-item-ref" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span></sup>
 `data-kit-item-ref` contains a label that when prefixed with a hashtag can be used to reference the item in the array being looped over in a [\<kit-array>](#reference-html-tags-kit-array "<kit-array>") tag.  
 Reference attributes (including `data-kit-array-ref`, `data-kit-item-index-ref`, `data-kit-item-ref`, and `data-kit-model-ref`) may not have the same value as a reference attribute defined on a parent component element.  
 
 &nbsp;
 
 ---
-#### data-kit-model <span id="reference-html-attributes-data-kit-model" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span>^
+#### data-kit-model <span id="reference-html-attributes-data-kit-model" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span></sup>
 `data-kit-model` is used to specify the model for a [\<kit-component>](#reference-html-tags-kit-component "<kit-component>") tag.  
 UI-KIT evaluates the value of this attribute as Javascript.
 
 &nbsp;
 
 ---
-#### data-kit-model-input <span id="reference-html-attributes-data-kit-model-input" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span>^
+#### data-kit-model-input <span id="reference-html-attributes-data-kit-model-input" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span></sup>
 `data-kit-model-input` is used to specify input passed to a model's `initialize()` method.  
 See [KitComponent](#reference-javascript-kit-component "KitComponent") for more detail.  
 UI-KIT evaluates the value of this attribute as Javascript.
@@ -1015,19 +1015,19 @@ UI-KIT evaluates the value of this attribute as Javascript.
 &nbsp;
 
 ---
-#### data-kit-model-ref <span id="reference-html-attributes-data-kit-model-ref" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span>^
+#### data-kit-model-ref <span id="reference-html-attributes-data-kit-model-ref" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span></sup>
 `data-kit-model-ref` contains a label that when prefixed with a hashtag can be used to reference the model associated with a [\<kit-component>](#reference-html-tags-kit-component "<kit-component>") tag.  
 Reference attributes (including `data-kit-array-ref`, `data-kit-item-index-ref`, `data-kit-item-ref`, and `data-kit-model-ref`) may not have the same value as a reference attribute defined on a parent component element.  
 
 &nbsp;
 
 ---
-#### data-kit-template-path <span id="reference-html-attributes-data-kit-template-path" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span>^  
+#### data-kit-template-path <span id="reference-html-attributes-data-kit-template-path" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html-attributes "attributes")</span></sup>  
 `data-kit-template-path` is used to specify the path to an external html template for a [\<kit-component>](#reference-html-tags-kit-component "<kit-component>") tag.
 
 &nbsp;
 
-### Special characters <span id="reference-html-special-characters" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html "html reference")</span>^
+### Special characters <span id="reference-html-special-characters" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html "html reference")</span></sup>
 There are a few special character sequences that can be used to tell UI-KIT how to render content.
 Content between `%{` and `}%` is evaluated as javascript and the result is written into the html.
 
@@ -1081,7 +1081,7 @@ If needed, model references may be escaped by prefixing with a backslash.
 
 &nbsp;
 
-## CSS reference <span id="reference-css" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html "html reference")</span>^
+## CSS reference <span id="reference-css" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html "html reference")</span></sup>
 There are no special css class names or rules specific to UI-KIT.  
 
 But there is a convention that can be followed to scope css styles to a specific component so that everything having to do with a component can be found in one folder location.
@@ -1137,14 +1137,14 @@ After UI-KIT has removed any inner html template from the document (and added a 
 
 &nbsp;
 
-## Javascript reference <span id="reference-javascript" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference "reference")</span>^
+## Javascript reference <span id="reference-javascript" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference "reference")</span></sup>
 The Javascript secion of the reference is divided into 2 sub-sections:
 - [Working with models](#reference-javascript-working-with-models "working with models")
 - [Framework classes](#reference-javascript-framework "framework classes")
 
 &nbsp;
 
-### Working with models <span id="reference-javascript-working-with-models" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript "javascript reference")</span>^
+### Working with models <span id="reference-javascript-working-with-models" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript "javascript reference")</span></sup>
 There are two ways to provide a UI-KIT component with a model:
 1. Pass a model to the component from its parent context using the `data-kit-model` attribute.
 2. Implement a `createModel()` method in a Javascript module located in a file in the same folder and with the same name as the component's html template.
@@ -1239,7 +1239,7 @@ See [Framework classes](#reference-javascript-framework "framework classes") bel
 
 &nbsp;
 
-### Framework classes <span id="reference-javascript-framework" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript "javascript reference")</span>^
+### Framework classes <span id="reference-javascript-framework" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript "javascript reference")</span></sup>
 The items in this section document the capabilities of the UI-KIT framework classes:
 
 - [KitComponent](#reference-javascript-framework-kit-component "KitComponent")
@@ -1256,7 +1256,7 @@ The items in this section document the capabilities of the UI-KIT framework clas
 &nbsp;
 
 ---
-#### KitComponent <span id="reference-javascript-framework-kit-component" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span>^
+#### KitComponent <span id="reference-javascript-framework-kit-component" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span></sup>
 `KitComponent` facilitates the mapping of html component elements to Javascript component models. UI-KIT creates a `KitComponent` instance for the `body` tag and each `<kit-array>`, `<kit-component>`, and `<kit-if>` tag in the document.
 
 &nbsp;
@@ -1393,7 +1393,7 @@ The items in this section document the capabilities of the UI-KIT framework clas
 &nbsp;
 
 ---
-#### KitComponentOptions <span id="reference-javascript-framework-kit-component-options" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span>^
+#### KitComponentOptions <span id="reference-javascript-framework-kit-component-options" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span></sup>
 `KitComponentOptions` encapsulates the options available when creating a KitComponent.  
 
 &nbsp;
@@ -1485,7 +1485,7 @@ The items in this section document the capabilities of the UI-KIT framework clas
 &nbsp;
 
 ---
-#### KitComponentType <span id="reference-javascript-framework-kit-component-type" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span>^
+#### KitComponentType <span id="reference-javascript-framework-kit-component-type" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span></sup>
 `KitComponentType` is an enumeration of the types of components that can be created by UI-KIT:
 - `"Component"`,
 - `"ConditionalComponent"`,
@@ -1494,7 +1494,7 @@ The items in this section document the capabilities of the UI-KIT framework clas
 &nbsp;
 
 ---
-#### KitDependencyManager <span id="reference-javascript-framework-kit-dependency-manager" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span>^
+#### KitDependencyManager <span id="reference-javascript-framework-kit-dependency-manager" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span></sup>
 `KitDependencyManager` provides inversion of control support for objects with dependencies.
 This class is used by UI-KIT to manage browser dependencies (such as the window and document objects) internally and is useful when unit testing applications using UI-KIT.
 
@@ -1614,7 +1614,7 @@ This class is used by UI-KIT to manage browser dependencies (such as the window 
 &nbsp;
 
 ---
-#### KitMessenger <span id="reference-javascript-framework-kit-messenger" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span>^
+#### KitMessenger <span id="reference-javascript-framework-kit-messenger" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span></sup>
 `KitMessenger` is used to send and receive messages between components.
 
 > Example of subscribing to receive messages:
@@ -1667,7 +1667,7 @@ This class is used by UI-KIT to manage browser dependencies (such as the window 
 &nbsp;
 
 ---
-#### KitMutationObserverFactory <span id="reference-javascript-framework-kit-mutation-observer-factory" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span>^
+#### KitMutationObserverFactory <span id="reference-javascript-framework-kit-mutation-observer-factory" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span></sup>
 `KitMutationObserverFactory` is a factory class for creating mutation observers.
 
 &nbsp;
@@ -1688,7 +1688,7 @@ This class is used by UI-KIT to manage browser dependencies (such as the window 
 &nbsp;
 
 ---
-#### KitNavigator <span id="reference-javascript-framework-kit-navigator" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span>^
+#### KitNavigator <span id="reference-javascript-framework-kit-navigator" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span></sup>
 `KitNavigator` facilitates navigation functionality.
 This class uses [KitMessenger](#reference-javascript-framework-kit-messenger "KitMessenger") to publish navigation events.
 
@@ -1753,7 +1753,7 @@ This class uses [KitMessenger](#reference-javascript-framework-kit-messenger "Ki
 &nbsp;
 
 ---
-#### KitRenderer <span id="reference-javascript-framework-kit-renderer" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span>^
+#### KitRenderer <span id="reference-javascript-framework-kit-renderer" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span></sup>
 `KitRenderer` is a Framework class used to render component html elements.
 
 &nbsp;
@@ -1789,7 +1789,7 @@ This class uses [KitMessenger](#reference-javascript-framework-kit-messenger "Ki
 &nbsp;
 
 ---
-#### KitResourceManager <span id="reference-javascript-framework-kit-resource-manager" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span>^
+#### KitResourceManager <span id="reference-javascript-framework-kit-resource-manager" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span></sup>
 `KitResourceManager` encapsulates functionality for interacting with network resources.
 
 &nbsp;
@@ -1822,7 +1822,7 @@ This class uses [KitMessenger](#reference-javascript-framework-kit-messenger "Ki
 &nbsp;
 
 ---
-#### KitStartup <span id="reference-javascript-framework-kit-startup" />^<span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span>^
+#### KitStartup <span id="reference-javascript-framework-kit-startup" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span></sup>
 `KitStartup` is a Framework class used to initialize a UI-KIT application.
 
 &nbsp;
