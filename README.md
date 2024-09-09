@@ -116,7 +116,7 @@ A full reference on the UI-KIT html tags and attributes and Javascript framework
 
 &nbsp;
 
-# Quick start guide <span id="quick-start" />^<span style="font-size:8pt;">[top](#toc "table of contents")</span>^
+# Quick start guide <span id="quick-start" /><sup><span style="font-size:8pt;">[top](#toc "table of contents")</span></sup>
 In this section we will build a simple single-page web application in a step-by-step fashion while introducing the basic concepts of building an app with UI-KIT.
 At the end of this section you will have a functioning web-application with a heading component, a navigation panel component, and a couple of content components that are displayed conditionally depending on the current url.
 
