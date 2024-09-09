@@ -177,7 +177,8 @@ I have a Windows laptop and use either Visual Studio or Visual Studio Code to de
 For me, an easy way to serve web content is with IISExpress.
 IISExpress is free to use and is included with Visual Studio but can also be downloaded and installed separately (see [IISExpress install](https://www.microsoft.com/en-us/download/details.aspx?id=48264 "iis express install")).
 
-If you are using IISExpress, once installed, open a command prompt and navigate to your application folder with the cd command:
+If you are using IISExpress, once installed, open a command prompt by clicking the Windows Start button or the Window key, type in "cmd", and select the Command Prompt app.  
+In the command prompt window, navigate to your application folder with the cd command:
 
 > Navigate to your app folder:
 >```cmd
