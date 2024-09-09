@@ -191,7 +191,7 @@ Then run the following command to start serving your application:
 >"C:\Program Files (x86)\IIS Express\iisexpress" /path:%cd%\
 >```
 
-> <span style="color:gold;font-weight:bold;">◊</span> _Note:_   
+> <span style="color:#FFD700;font-weight:bold;">◊</span> _Note:_   
 > _The IISExpress command might be slightly different depending on where IISExpress was installed on your machine._
 
 After running the command, you should see output in the command window that looks something like this:
@@ -267,7 +267,7 @@ Replace the html inside the body tag of index.html with `<kit-component>` tags f
 
 `<kit-component>` is a custom html element (1 of 3) used by UI-KIT to define a component.
 
-> <span style="color:gold;font-weight:bold;">◊</span> _Note:_  
+> <span style="color:#FFD700;font-weight:bold;">◊</span> _Note:_  
 > _Normally when we define a component with the data-kit-template-path attribute as above, UI-KIT expects to find a javascript module in a related location.  Since we're not covering javascript models yet in this Quick start step, we take a short cut by explicitly providing a (null) model using the data-kit-model attribute.  This isn't something you would do normally, but it's useful in this context._
 
 After making these updates, refresh your browser.
@@ -276,7 +276,7 @@ You should now see a page with 3 headings:
 - "Navigation"
 - "Content area".
 
-> <span style="color:gold;font-weight:bold;">◊</span> _Note:_   
+> <span style="color:#FFD700;font-weight:bold;">◊</span> _Note:_   
 > _You may need to clear your browser's cache to see the changes.
 > In Chrome, you can do this by first pressing F12 to open the developer tools, and then right-clicking the refresh button and selecting "Empty Cache and Hard Reload"._
 
@@ -304,7 +304,7 @@ In the folder for the header component, add a css file called heading.css.
 
 This fixes the position of the heading component to the top left of the page and gives it a background color.
 
-> <span style="color:gold;font-weight:bold;">◊</span> _Note:_  
+> <span style="color:#FFD700;font-weight:bold;">◊</span> _Note:_  
 > _The @scope pseudo-class sets the scope for the contained css rules.
 > Setting the scope to the id of the top element in the component's template limits the css rules to the heading component.
 > Using this pattern helps to isolate the css rules for each component and makes the css easier to manage._
@@ -313,7 +313,7 @@ Now we need to add a reference to this css file in heading.html:
 
 > heading.html:
 > ```html
-> <div>
+> <div id="heading">
 >   <link rel="stylesheet" href="/components/heading/heading.css" />
 >   <h2>Hello UI-KIT!</h2>
 > </div>
@@ -346,7 +346,7 @@ And refer to this css file in navigation.html:
 > ```html
 > <div id="navigation">
 >   <link rel="stylesheet" href="/components/navigation/navigation.css" />
->   <h2>Navigation panel</h2>
+>   <h2>Navigation</h2>
 > </div>
 > ```
 
@@ -453,7 +453,7 @@ Since `data-kit-model-ref` equals "model", we can reference the model using the 
 `%{` and `}%` are also special characters used by UI-KIT.  
 UI-KIT evaluates the text between `%{` and `}%` as javascript and writes the result into the html.
 
-> <span style="color:gold;font-weight:bold;">◊</span> _Note:_  
+> <span style="color:#FFD700;font-weight:bold;">◊</span> _Note:_  
 > _If you ever need to render a literal `%{` or `}%` in your html, you can escape them by prefixing with a backslash: `\%{` and `\}%`._
 
 The value of `data-kit-model-ref` must be unique in the context of the current html template.  
@@ -517,7 +517,7 @@ In this case, we've defined a ContentModel class and the function returns an ins
 It isn't required, but if the model returned from the `createModel()` function has an async `initialize()` method, as we do in this example, UI-KIT will call that method with the component's auto-generated component id as an argument when it first calls `createModel()` to create the component.  
 In this case, in our `initialize()` method we set two properties on our model: `myComponentId` and `content`.
 
-> <span style="color:gold;font-weight:bold;">◊</span> _Note:_  
+> <span style="color:#FFD700;font-weight:bold;">◊</span> _Note:_  
 > _UI-KIT will also look for an optional `onLoadedInDocument()` method on the model.  If it exists, UI-KIT will call it after the component has been rendered in the document.  See  [Working with models](#reference-javascript-working-with-models "working with models") for more info._
 
 
@@ -544,7 +544,7 @@ The content component should now display:
 
 Clicking the button demonstrates calling a function on the component's model and displays an alert with the text "my component id is: 4".
 
-> <span style="color:gold;font-weight:bold;">◊</span> _Note:_  
+> <span style="color:#FFD700;font-weight:bold;">◊</span> _Note:_  
 > _Why is component id equal to 4? UI-KIT automatically designates the document body tag as the first component.  Header is component #2, Navigation is component #3, and Content is component #4.
 > We're not doing much with the component id yet.  But it's useful if you need to re-render the component as we'll see later._
 
@@ -694,6 +694,7 @@ Finally, in the `initialize()` method, instead of hard-coding the current sectio
 >   this.myComponentId = componentId;
 >   this.currentSection = KitNavigator.getCurrentUrlFragment();
 >   KitMessenger.subscribe(KitNavigator.navTopicName, this.myComponentId, this.onNavigation.name);
+>   KitRenderer.renderComponent(this.myComponentId);
 > }
 > ```
 
@@ -969,7 +970,7 @@ This attribute is useful for adding attributes at runtime that do not have a val
 > -->
 > ```
 
-> <span style="color:gold;font-weight:bold;">◊</span> _Note:_   
+> <span style="color:#FFD700;font-weight:bold;">◊</span> _Note:_   
 > _Using `%{` and `}%` can be a good way to set the value of an attribute but should not be used to add attributes as the browser may adjust the text of the added attribute in unexpected ways (changing case for example).  
 The `data-kit-add-attributes` attribute is the preferred method for adding attributes with UI-KIT.
 
@@ -1136,7 +1137,7 @@ To scope css styles to a component, we can follow a convention of specifying a c
 > }
 > ```
 
-> <span style="color:gold;font-weight:bold;">◊</span> _Tip:_   
+> <span style="color:#FFD700;font-weight:bold;">◊</span> _Tip:_   
 > _For components with an "inline" inner html template, UI-KIT first removes the inner html template from the document before processing the template for display. When the component is included directly in the markup for the index.html file (rather than the markup in a component template html file), 
 > the component's template may be briefly displayed in the browser before being removed.
 > To prevent this brief display, add the following rule to a global stylesheet._
@@ -1188,7 +1189,7 @@ With this method, we use the `data-kit-template-path` attribute to specify the p
 > </kit-component>
 > ```
 
-> <span style="color:gold;font-weight:bold;">◊</span> _Note:_   
+> <span style="color:#FFD700;font-weight:bold;">◊</span> _Note:_   
 > _Within an external html template, the model reference is implicitly set as "model" and so the model can be referenced in the template using "#model"._
 
 With the markup above, UI-KIT expects to find an HTML template file at the specified path *and* a Javascript file containing the component's model in the same folder and with the same name as the html template:
