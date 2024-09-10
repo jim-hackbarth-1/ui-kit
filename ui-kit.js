@@ -480,7 +480,7 @@ export class KitComponent {
                 model = [];
             }
             if (!Array.isArray(model)) {
-                throw new Error(`invalid model. array component model must be an array`);
+                throw new Error("invalid model. array component model must be an array");
             }
         }
         return model;
@@ -598,42 +598,42 @@ export class KitRenderer {
         KitRenderer.#addAttributes(componentElement);
 
         // render child components
+        let itemIndex = 0;
+        let arrayItemComponents = [];
         for (const childComponent of childComponents) {
             switch (childComponent.componentType) {
-                case KitComponentType.ConditionalComponent:
-                    if (childComponent.model) {
-                        KitRenderer.renderComponent(childComponent.id);
-                    }
-                    break;
-                case KitComponentType.ArrayComponent:
-                    let itemIndex = 0;
-                    let arrayItemComponents = [];
-                    for (const arrayItem of childComponent.model) {
-                        const options = {
-                            template: childComponent.template,
-                            model: arrayItem,
-                            parent: childComponent,
-                            modelRef: childComponent.itemRef,
-                            indexRef: childComponent.itemIndexRef,
-                            index: itemIndex
-                        };
-                        const arrayItemElement = appDocument.createElement(KitRenderer.#componentTag);
-                        const arrayItemComponent = KitRenderer.#createComponentForElement(options, arrayItemElement);
-                        arrayItemComponents.push(arrayItemComponent);
-                        arrayItemElement.setAttribute(
-                            KitRenderer.#modelAttribute, `window.kitComponentManager.findComponent(${childComponent.id}).model[${itemIndex}]`);
-                        arrayItemElement.setAttribute(
-                            KitRenderer.#modelRefAttribute, childComponent.itemRef);
-                        const childComponentElement = appDocument.querySelector(`[${KitRenderer.#componentIdAttribute}="${childComponent.id}"]`);
-                        childComponentElement.append(arrayItemElement);
-                        itemIndex++;
-                    }
-                    for (const arrayItemComponent of arrayItemComponents) {
-                        KitRenderer.renderComponent(arrayItemComponent.id);
-                    }
-                    break;
-                default:
+            case KitComponentType.ConditionalComponent:
+                if (childComponent.model) {
                     KitRenderer.renderComponent(childComponent.id);
+                }
+                break;
+            case KitComponentType.ArrayComponent:
+                for (const arrayItem of childComponent.model) {
+                    const options = {
+                        template: childComponent.template,
+                        model: arrayItem,
+                        parent: childComponent,
+                        modelRef: childComponent.itemRef,
+                        indexRef: childComponent.itemIndexRef,
+                        index: itemIndex
+                    };
+                    const arrayItemElement = appDocument.createElement(KitRenderer.#componentTag);
+                    const arrayItemComponent = KitRenderer.#createComponentForElement(options, arrayItemElement);
+                    arrayItemComponents.push(arrayItemComponent);
+                    arrayItemElement.setAttribute(
+                        KitRenderer.#modelAttribute, `window.kitComponentManager.findComponent(${childComponent.id}).model[${itemIndex}]`);
+                    arrayItemElement.setAttribute(
+                        KitRenderer.#modelRefAttribute, childComponent.itemRef);
+                    const childComponentElement = appDocument.querySelector(`[${KitRenderer.#componentIdAttribute}="${childComponent.id}"]`);
+                    childComponentElement.append(arrayItemElement);
+                    itemIndex++;
+                }
+                for (const arrayItemComponent of arrayItemComponents) {
+                    KitRenderer.renderComponent(arrayItemComponent.id);
+                }
+                break;
+            default:
+                KitRenderer.renderComponent(childComponent.id);
             }
         }
     }
@@ -965,7 +965,7 @@ export class KitRenderer {
         }
         // evaluate
         const regex = new RegExp(/(?<=%\{).*?(?=\}%)/, "g"); // characters between %{ and }%
-        const matches = [...output.matchAll(regex)]
+        const matches = [...output.matchAll(regex)];
         if (matches && matches.length > 0) {
             for (const match of matches) {
                 const result = await KitRenderer.#evaluateString(match[0]);
