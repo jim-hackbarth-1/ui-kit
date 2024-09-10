@@ -138,8 +138,11 @@ At the end of this section you will have a functioning web-application with a he
 With a single-page web application there is just one page: index.html.
 Your application will dynamically modify the html content of this page based on things like user input and navigation actions.
 
+:point_right: _Action: Create app folder_  
 Let's start by creating a folder in your local file system to contain your web application.
 You can name the folder anything you like.  I'll call mine "hello-ui-kit".  
+
+:point_right: _Action: Add index.html file_  
 Add an index.html file to this folder with the following initial content:
 
 > index.html:
@@ -162,7 +165,10 @@ The html above contains a reference to ui-kit.js:
 >```html
 >   <script type="module" src="/ui-kit.js"></script>
 >```
-To make this a valid script reference, download a copy of the ui-kit.js file and place it in the same folder.
+
+:point_right: _Action: Add ui-kit.js file_  
+To make this a valid script reference, download a copy of the ui-kit.js file and place it in the same folder.  
+
 You should now have an application folder containing two files:
 
 >```folder structure
@@ -177,7 +183,10 @@ I have a Windows laptop and use either Visual Studio or Visual Studio Code to de
 For me, an easy way to serve web content is with IISExpress.
 IISExpress is free to use and is included with Visual Studio but can also be downloaded and installed separately (see [IISExpress install](https://www.microsoft.com/en-us/download/details.aspx?id=48264 "iis express install")).
 
+:point_right: _Action: Open command prompt_  
 If you are using IISExpress, once installed, open a command prompt by clicking the Windows Start button or the Window key, type in "cmd", and select the Command Prompt app.  
+
+:point_right: _Action: Navigate to app folder in command prompt_  
 In the command prompt window, navigate to your application folder with the cd command:
 
 > Navigate to your app folder:
@@ -185,6 +194,7 @@ In the command prompt window, navigate to your application folder with the cd co
 >C:\>cd <path-to-your-app-folder-here>
 >```
 
+:point_right: _Action: Run IISExpress_    
 Then run the following command to start serving your application:
 
 >Run IISExpress:
@@ -201,7 +211,9 @@ After running the command, you should see output in the command window that look
 >Successfully registered URL "http://localhost:8080/" for site "Development Web Site" application "/"
 >```
 
+:point_right: _Action: Browse to app_  
 However you are serving your application, open up a browser and navigate to your index page (_e.g. "http://localhost:8080/index.html"_).  
+
 You should see a page with a heading that reads "Hello UI-KIT!".
 
 &nbsp;  
@@ -217,6 +229,8 @@ We've seen an example of the inline approach in the "Hello UI-Kit! HTML" code ex
 In this step we'll explore the second method: loading the template from an external file.
 
 It isn't strictly necessary, but a nice way to organize an application is to create a folder for each component.
+
+:point_right: _Action: Create component folders_  
 Let's follow that convention and create some new subfolders for our components within our app directory like this:
 
 >```folder structure
@@ -228,11 +242,13 @@ Let's follow that convention and create some new subfolders for our components w
 >       - navigation.html
 >     > content
 >       - content.html
-> - index.html
-> - ui-kit.js
+>   - index.html
+>   - ui-kit.js
 >```
 
 heading.html, navigation.html, and content.html are the templates for our new heading, navigation, and content components.
+
+:point_right: _Action: Add basic component template content_   
 Put some basic content in each html template file to get started:
 
 > heading.html:
@@ -257,20 +273,24 @@ Put some basic content in each html template file to get started:
 > ```
 
 Now we just need to update our index.html file to refer to these new components.
-Replace the html inside the body tag of index.html with `<kit-component>` tags for each of our 3 components:
 
-> index.html:
+:point_right: _Action: Update index.html_  
+In the index.html file, replace the body tag's inner HTML with the following:
+
+> index.html (body tag inner html):
 > ```html
 > <kit-component data-kit-template-path="/components/heading/heading.html" data-kit-model="null"></kit-component>
 > <kit-component data-kit-template-path="/components/navigation/navigation.html" data-kit-model="null"></kit-component>
 > <kit-component data-kit-template-path="/components/content/content.html" data-kit-model="null"></kit-component>
 > ```
 
+ We've added one `<kit-component>` tag for each of our 3 components.  
 `<kit-component>` is a custom html element (1 of 3) used by UI-KIT to define a component.
 
 > <span style="color:#FFD700;font-weight:bold;">◊</span> _Note:_  
 > _Normally when we define a component with the data-kit-template-path attribute as above, UI-KIT expects to find a javascript module in a related location.  Since we're not covering javascript models yet in this Quick start step, we take a short cut by explicitly providing a (null) model using the data-kit-model attribute.  This isn't something you would do normally, but it's useful in this context._
 
+:point_right: _Action: Refresh browser_  
 After making these updates, refresh your browser.
 You should now see a page with 3 headings: 
 - "Hello UI-KIT!"
@@ -282,6 +302,8 @@ You should now see a page with 3 headings:
 > In Chrome, you can do this by first pressing F12 to open the developer tools, and then right-clicking the refresh button and selecting "Empty Cache and Hard Reload"._
 
 This is a good start, but let's add some CSS styling so that each component's appearance better suits its function.   
+
+:point_right: _Action: Add heading.css_  
 In the folder for the header component, add a css file called heading.css.
 
 > heading.css:
@@ -310,6 +332,7 @@ This fixes the position of the heading component to the top left of the page and
 > Setting the scope to the id of the top element in the component's template limits the css rules to the heading component.
 > Using this pattern helps to isolate the css rules for each component and makes the css easier to manage._
 
+:point_right: _Action: Add reference to heading.css_  
 Now we need to add a reference to this css file in heading.html:
 
 > heading.html:
@@ -321,6 +344,8 @@ Now we need to add a reference to this css file in heading.html:
 > ```
 
 We'll do something similar for the navigation component.  
+
+:point_right: _Action: Add navigation.css_  
 Add a css file named navigation.css to the navigation component folder.
 
 > navigation.css:
@@ -341,6 +366,7 @@ Add a css file named navigation.css to the navigation component folder.
 > }
 > ```
 
+:point_right: _Action: Add reference to navigation.css_  
 And refer to this css file in navigation.html:
 
 > navigation.html:
@@ -353,6 +379,7 @@ And refer to this css file in navigation.html:
 
 This fixes the position of the navigation component to the left of the page and gives it a background.
 
+:point_right: _Action: Add content.css_  
 Finally, we need to fix up the content area style so the header and navigation panels don't cover up the content.
 
 > content.css:
@@ -366,6 +393,7 @@ Finally, we need to fix up the content area style so the header and navigation p
 > }
 > ```
 
+:point_right: _Action: Add reference to content.css_  
 And refer to this css file in content.html:
 
 > content.html:
@@ -390,10 +418,11 @@ Ok, at this point your folder structure should look like this:
 >     > content
 >       - content.css
 >       - content.html
-> - index.html
-> - ui-kit.js
+>   - index.html
+>   - ui-kit.js
 >```
 
+:point_right: _Action: Save all changes and refresh browser_  
 After saving your changes and refreshing your browser, you should see a page with clear content sections for heading, navigation, and content.
 
 > Browser view:
@@ -426,8 +455,8 @@ The "Hello UI-Kit! HTML" code example markup at the top of this document uses th
 
 > using the `data-kit-model` attribute:
 > ```html
-> >     <kit-component data-kit-model="{ title: 'Hello UI-Kit', isEasy: true,  howEasy: [ 'a', 'b', 'c' ] }"
->                    data-kit-model-ref="model">
+> <kit-component data-kit-model="{ title: 'Hello UI-Kit', isEasy: true,  howEasy: [ 'a', 'b', 'c' ] }"
+>                data-kit-model-ref="model">
 > ```
 
 In this example, the `data-kit-model` attribute sets the component's javascript model to an object with 3 properties:
@@ -470,9 +499,10 @@ The following markup would result in an error because the child component has de
 
 Now let's turn to the second method for defining a component's javascript model: using a separate javascript file. For this, we'll learn by creating a model for our content component.  
 
+:point_right: _Action: Remove `data-kit-model` attribute_  
 First, undo the short-cut we took earlier by removing the `data-kit-model` attribute from the `<kit-component>` tag in index.html where the content component is referenced.
 
-> `<kit-component>` tag in index.html for the content component:
+> `<kit-component>` tag for the content component (in index.html):
 > ```html
 > <kit-component data-kit-template-path="/components/content/content.html"></kit-component>
 > ```
@@ -481,6 +511,7 @@ When a component has the `data-kit-template-path` attribute and a model isn't sp
 So, if you create an html template at "/components/my-component/my-component.html", UI-KIT expects to find a javascript file at "/components/my-component/my-component.js".  
 So now that we've taken out our `data-kit-model="null"` shortcut in index.html, UI-KIT expects a javascript file at "/components/content/content.js".  
 
+:point_right: _Action: Add content.js file_    
 Let's add our content.js file.
 
 > content.js:
@@ -521,7 +552,7 @@ In this case, in our `initialize()` method we set two properties on our model: `
 > <span style="color:#FFD700;font-weight:bold;">◊</span> _Note:_  
 > _UI-KIT will also look for an optional `onLoadedInDocument()` method on the model.  If it exists, UI-KIT will call it after the component has been rendered in the document.  See  [Working with models](#reference-javascript-working-with-models "working with models") for more info._
 
-
+:point_right: _Action: Update content.html_    
 To make use of this javascript code, let's update content.html to reference the model:
 
 > content.html:
@@ -539,11 +570,13 @@ To make use of this javascript code, let's update content.html to reference the 
 Note the use of "#model" to refer to the model.  For components defined with an external html template, "model" is always implicitly defined as the reference name for the model.
 It's only for components where the html template is defined inline as inner html where the developer explicitly chooses a reference name for the model.  
 
+:point_right: _Action: Save all changes and refresh browser_    
 The content component should now display:
 - "Here is my content ..."
 - and a button with the text "display component id"
 
-Clicking the button demonstrates calling a function on the component's model and displays an alert with the text "my component id is: 4".
+:point_right: _Action: Test updates_    
+Clicking the "display component id" button demonstrates calling a function on the component's model and displays an alert with the text "my component id is: 4".
 
 > <span style="color:#FFD700;font-weight:bold;">◊</span> _Note:_  
 > _Why is component id equal to 4? UI-KIT automatically designates the document body tag as the first component.  Header is component #2, Navigation is component #3, and Content is component #4.
@@ -560,6 +593,7 @@ In this step, we'll learn how to conditionally render html content using the `<k
 For this step, we'll add a "currentSection" property to our content component model and use it to conditionally render only the "current content section" of our template.
 In a subsequent step, we'll extend this to display the current content section based on user navigation actions.
 
+:point_right: _Action: Update content.js_    
 First, in our content component model class, let's get rid of the "content" property we added earlier and add a "currentSection" property.    
 For now, we'll hard-code currentSection's value to "#section1" within the `initialize()` method.
 
@@ -571,6 +605,7 @@ For now, we'll hard-code currentSection's value to "#section1" within the `initi
 > }
 > ```
 
+:point_right: _Action: Update content.html_    
 Now, let's update the content.html to add different sections to the template but only render the "current" section.
 
 > content.html:
@@ -593,7 +628,9 @@ Now, let's update the content.html to add different sections to the template but
 > </div>
 > ```
 
+:point_right: _Action: Save all changes and refresh browser_    
 Refreshing the browser should now display "Section 1 content" only and not any of the other sections.  
+
 The value of `data-kit-condition` is evaulated for each `<kit-if>` tag.  
 The html inside each `<kit-if>` tag is only rendered if the condition is true.
 
@@ -605,6 +642,7 @@ The html inside each `<kit-if>` tag is only rendered if the condition is true.
 The `<kit-array>` tag is used to loop over an array of items and render html content for each item in the array.  
 In this step, we'll contrive to extend section 1 in the content component to use the `<kit-array>` tag.  
 
+:point_right: _Action: Update content.js_    
 Our first action will be to define a method on our component model that returns an array representing the "items" in content section 1.
 
 > content.js:
@@ -620,6 +658,7 @@ Our first action will be to define a method on our component model that returns 
 > }
 > ```
 
+:point_right: _Action: Update content.html_    
 Next, we'll update the inner HTML of the element representing section 1 in content.html to use the `<kit-array>` tag to loop over the items in section 1.
 
 > content.html:
@@ -634,7 +673,9 @@ Next, we'll update the inner HTML of the element representing section 1 in conte
 >   </kit-if>
 > ```
 
+:point_right: _Action: Save all changes and refresh browser_    
 Refreshing the browser should now display our list of 5 items in section 1.  
+
 The `data-kit-array` attribute is used to specify the array of items to loop over.  
 The `data-kit-item-ref` attribute (with the value "item") is used to reference the current item in the array within the html template. 
 The item reference name is prefixed with a hashtag just as with the `data-kit-model-ref` attribute we used earlier. 
@@ -650,6 +691,8 @@ See the [\<kit-array>](#reference-html-tags-kit-array "<kit-array>") for more in
 
 In the previous steps, we learned how to use the `<kit-component>`, `<kit-if>`, and `<kit-array>` tags as building blocks for creating dynamic html content.
 Now we're ready to use what we've learned to dynamically display content based on navigation events.  
+
+:point_right: _Action: Update navigation.html_    
 We'll start by adding navigation links to the navigation component.
 
 > navigation.html:
@@ -670,14 +713,17 @@ We'll start by adding navigation links to the navigation component.
 > ```
 
 Next, we'll update the content component to respond to navigation events.  
-We'll need to make 3 changes to the content component's javascript file.  
+We'll need to make 3 changes to the content component's javascript file. 
+
+:point_right: _Action: Add import statment to content.js_    
 First, we're going to be calling some methods in the UI-KIT library so we'll need to add an import statement at the top of the file.
 
 > import statement:
 > ```javascript
 > import { KitMessenger, KitNavigator, KitRenderer } from "../../ui-kit.js";
-> ```
+> ```  
 
+:point_right: _Action: Add `onNavigation()` method to content.js_    
 Second we need to add an `onNavigation()` method that will respond to navigation events and re-render the component:
 
 > onNavigation() function:
@@ -687,6 +733,7 @@ Second we need to add an `onNavigation()` method that will respond to navigation
 > }
 > ```
 
+:point_right: _Action: Update `initialize()` method in content.js_    
 Finally, in the `initialize()` method, instead of hard-coding the current section value, we'll retrieve it from the current url.  We'll also call `KitMessenger.subscribe()` to start listening for navigation events.  
 
 > `initialize()` method:
@@ -701,8 +748,7 @@ Finally, in the `initialize()` method, instead of hard-coding the current sectio
 
 Our `KitMessenger.subscribe()` call tells UI-KIT to call the `onNavigation()` method whenever a navigation event occurs.
 
-
-
+:point_right: _Action: Save all changes and refresh browser_    
 Refreshing the browser, you can now click on the navigation links (or the browser's back and forward buttons) and observe the content updating dynamically in response.  
 
 &nbsp;  
@@ -719,8 +765,9 @@ However, that synchronization magic does have a cost in terms of complexity.  Th
 
 UI-KIT takes a different (simpler) approach.  The state of component models is not tracked internally by the framework and it is left to the developer to explicitly synchronize the view after state changes occur. We saw this explicit synchronization in the previous step when we called `KitRenderer.renderComponent()` to re-render the content component after a navigation event. In this step, we'll explore state transitions a bit more with another example:  showing a loading indicator.
 
-It's a pretty common scenario with web applications that it takes some time to get the data needed to fully present a component.  Often we need to load a file, query a database, or fetch data from an API over the internet, all of which takes some time.  To show our users that the data is on its way, it's common to initially show a loading indicator and then later, when the model changes state from not having data to having data, we update the view to show the requested data. In this step, we'll update the content component to initially display a loading indicator when section 1 data is requested and then transition to showing data.
+It's often the case with web applications that it takes some time to get the data needed to fully present a component.  Often we need to load a file, query a database, or fetch data from an API over the internet, all of which takes some time.  To show our users that the data is on its way, it's common to initially show a loading indicator and then later, when the model changes state from not having data to having data, we update the view to show the requested data. In this step, we'll update the content component to initially display a loading indicator when section 1 data is requested and then transition to showing data.
 
+:point_right: _Action: Update content.css_    
 First, let's borrow an animated css loading indicator from the web and add it to our styles for the content component.
 
 > content.css:
@@ -764,66 +811,75 @@ First, let's borrow an animated css loading indicator from the web and add it to
 > }
 > ```
 
-I borrowed the css for this loader from [css-loaders.com](https://css-loaders.com/ "css-loaders.com"). It looks like it's designed to be used with a div element with class "loader".
-So next, let's update the section 1 part of our content template to make use of our new css loading indicator.
+I borrowed the css for this loader from [css-loaders.com](https://css-loaders.com/ "css-loaders.com"). It looks like it's designed to be used with a div element with class "loader" so we'll need to update our html template.
+
+:point_right: _Action: Update content.html_    
+Update the section 1 part of our content template to make use of our new css loading indicator.
 
 > section 1 of content.html:
 > ```html
 > <kit-if data-kit-condition="#model.currentSection === '#section1' || !#model.currentSection">
->     <div>Section 1 content</div>
->     <kit-if data-kit-condition="#model.isSection1Loading">
->       <div style="margin:20px;" class="loader"></div>
->     </kit-if>
->     <kit-if data-kit-condition="!#model.isSection1Loading">
->       <ul>
+>   <div>Section 1 content</div>
+>   <kit-if data-kit-condition="#model.isSection1Loading">
+>     <div style="margin:20px;" class="loader"></div>
+>   </kit-if>
+>   <kit-if data-kit-condition="!#model.isSection1Loading">
+>     <ul>
 >       <kit-array data-kit-array="#model.section1Items" data-kit-item-ref="item">
 > 	      <li id="%{#item.itemId}%">Name: %{#item.name}%</li>
 >       </kit-array>
->       </ul>
->     </kit-if>
+>     </ul>
 >   </kit-if>
+> </kit-if>
 > ```
 
 We've added our div with `class="loader"` for our loading indicator and wrapped in in a `<kit-if>` tag so that it is only displayed when `isSection1Loading` is true.
 Also, we've wrapped the main content of section 1 in a `<kit-if>` tag so that it is only displayed when `isSection1Loading` is false, meaning it's done loading.
-And note that we've changed from using the `getSection1Items()` method to using a `section1Items` property on the model to get our items array.
+And note that we've changed from using the `getSection1Items()` method to using a `section1Items` property on the model to get our items array so we'll have to update our Javascript model correspondingly.
 
-Finally, we have to update our model to go with these changes.  
-We will remove our existing `getSection1Items()` method and instead add a `section1Items` property that gets set in the `initialize()` method.
+:point_right: _Action: Update content.js_    
+Remove the existing `getSection1Items()` method and update `initialize()` to set a `section1Items` property.
 
 > content.js:
 > ```javascript
->     async initialize(componentId) {
->         this.myComponentId = componentId;
->         this.currentSection = KitNavigator.getCurrentUrlFragment();
->         KitMessenger.subscribe(KitNavigator.navTopicName, this.myComponentId, this.onNavigation.name);
+> async initialize(componentId) {
+>   this.myComponentId = componentId;
+>   this.currentSection = KitNavigator.getCurrentUrlFragment();
+>   KitMessenger.subscribe(KitNavigator.navTopicName, this.myComponentId, this.onNavigation.name);
 > 
->         if (this.currentSection === "#section1") {
->           
->           // show state without data (loading)
->           this.section1Items = [];
->           this.isSection1Loading = true;
->           KitRenderer.renderComponent(this.myComponentId);
->           
->           // get data (simulating a 3-second delay)
->           await new Promise(r => setTimeout(r, 3000));
->           this.section1Items = [
->             { itemId: 1, name: "Item 1" },
->             { itemId: 2, name: "Item 2" },
->             { itemId: 3, name: "Item 3" },
->             { itemId: 4, name: "Item 4" },
->             { itemId: 5, name: "Item 5" }
->           ];
->           this.isSection1Loading = false;
->         }
->         
->         // synchronize view after state update
->         KitRenderer.renderComponent(this.myComponentId);
->     }
+>   if (this.currentSection === "#section1") {
+> 
+>     // show state without data (loading)
+>     this.section1Items = [];
+>     this.isSection1Loading = true;
+>     KitRenderer.renderComponent(this.myComponentId);
+> 
+>     // get data (simulating a 3-second delay)
+>     await new Promise(r => setTimeout(r, 3000));
+>     this.section1Items = [
+>       { itemId: 1, name: "Item 1" },
+>       { itemId: 2, name: "Item 2" },
+>       { itemId: 3, name: "Item 3" },
+>       { itemId: 4, name: "Item 4" },
+>       { itemId: 5, name: "Item 5" }
+>     ];
+>     this.isSection1Loading = false;
+>   }
+> 
+>   // synchronize view after state update
+>   KitRenderer.renderComponent(this.myComponentId);
+> }
 > ```
 
-In the code above, we render the component in its initial (loading) state, get the data (with an artificial delay), and then render the component again after retrieving the data. Updating your browser should now show the loading indicator for 3 seconds before displaying the list of items in section 1.  
-This completes the quick start guide.  I hope you like using UI-KIT.  For additional information see the [Reference](#reference "reference") section below.
+In the code above, we render the component in its initial (loading) state, get the data (with an artificial delay), and then render the component again after retrieving the data.  
+
+:point_right: _Action: Save all changes and refresh browser_    
+After refreshing your browser you should now see the loading indicator for 3 seconds before seeing the list of items in section 1.  
+
+This completes the quick start guide.  
+I hope you like using UI-KIT.  For additional information see the [Reference](#reference "reference") section below.  
+\- Jim Hackbarth  
+\- (jim.hackbarth1@gmail.com)
 
 &nbsp;
 
