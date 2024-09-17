@@ -570,21 +570,22 @@ export class KitRenderer {
         const nestedChildComponentElements = [...temp.querySelectorAll(selector)];
         const topChildComponentElements = allChildComponentElements.filter(e => !nestedChildComponentElements.includes(e));
         let childComponents = [];
+        const refs = KitRenderer.#getRefs(component);
         for (const childComponentElement of topChildComponentElements) {
             let templatePath = null;
             if (childComponentElement.tagName === KitRenderer.#componentTag
                 && childComponentElement.hasAttribute(KitRenderer.#templatePathAttribute)) {
-                templatePath = childComponentElement.getAttribute(KitRenderer.#templatePathAttribute);
+                templatePath = await KitRenderer.#getAttributeValue(KitRenderer.#templatePathAttribute, childComponentElement, refs);
             }
             const options = {
                 componentType: KitRenderer.#getComponentType(childComponentElement),
                 template: await KitRenderer.#getTemplate(childComponentElement, templatePath),
-                model: await KitRenderer.#getModel(childComponentElement, component),
-                modelInput: await KitRenderer.#getModelInput(childComponentElement, component),
+                model: await KitRenderer.#getModel(childComponentElement, refs),
+                modelInput: await KitRenderer.#getModelInput(childComponentElement, refs),
                 parent: templatePath ? null : component,
-                modelRef: KitRenderer.#getModelRef(childComponentElement),
-                itemRef: KitRenderer.#getItemRef(childComponentElement),
-                itemIndexRef: KitRenderer.#getItemIndexRef(childComponentElement)
+                modelRef: await KitRenderer.#getModelRef(childComponentElement, refs),
+                itemRef: await KitRenderer.#getItemRef(childComponentElement, refs),
+                itemIndexRef: await KitRenderer.#getItemIndexRef(childComponentElement, refs)
             };
             const childComponent = KitRenderer.#createComponentForElement(options, childComponentElement);
             childComponentElement.innerHTML = "";
@@ -592,10 +593,10 @@ export class KitRenderer {
         }
 
         // set inner html content
-        componentElement.innerHTML = await KitRenderer.#resolveModelRefs(temp.innerHTML, component);
+        componentElement.innerHTML = await KitRenderer.#resolveModelRefs(temp.innerHTML, refs);
 
         // resolve wrapped attributes
-        KitRenderer.#addAttributes(componentElement);
+        await KitRenderer.#addAttributes(componentElement, refs);
 
         // render child components
         let itemIndex = 0;
@@ -801,10 +802,10 @@ export class KitRenderer {
     /**
      * Gets the component model associated with the provided element
      * @param {HTMLElement} element - the element to be evaluated
-     * @param {KitComponent} parentComponent - the parent component
+     * @param {string[]} refs - the parent component references
      * @returns {any}
      */
-    static async #getModel(element, parentComponent) {
+    static async #getModel(element, refs) {
 
         // get model from markup
         let hasAttribute = false;
@@ -822,13 +823,13 @@ export class KitRenderer {
             attributeValue = element.getAttribute(KitRenderer.#modelAttribute);
         }
         if (hasAttribute) {
-            const result = await KitRenderer.#resolveModelRefs(attributeValue, parentComponent);
+            const result = await KitRenderer.#resolveModelRefs(attributeValue, refs);
             return await KitRenderer.#evaluateString(result);
         }
 
         // get model from path
         if (element.tagName === KitRenderer.#componentTag && element.hasAttribute(KitRenderer.#templatePathAttribute)) {
-            const templatePath = element.getAttribute(KitRenderer.#templatePathAttribute);
+            const templatePath = await KitRenderer.#getAttributeValue(KitRenderer.#templatePathAttribute, element, refs);
             const modulePath = templatePath.replace(".html", ".js");
             return await KitRenderer.#getModelFromPath(modulePath);
         }
@@ -859,13 +860,12 @@ export class KitRenderer {
     /**
      * Gets model input associated with the provided element
      * @param {HTMLElement} element - the element to be evaluated
-     * @param {KitComponent} parentComponent - the parent component of the element's component
+     * @param {string[]} refs - the parent component refs of the element's component
      * @returns {any}
      */
-    static async #getModelInput(element, parentComponent) {
+    static async #getModelInput(element, refs) {
         if (element.tagName === KitRenderer.#componentTag && element.hasAttribute(KitRenderer.#modelInputAttribute)) {
-            const attributeValue = element.getAttribute(KitRenderer.#modelInputAttribute);
-            const result = await KitRenderer.#resolveModelRefs(attributeValue, parentComponent);
+            const result = await KitRenderer.#getAttributeValue(KitRenderer.#modelInputAttribute, element, refs);
             return await KitRenderer.#evaluateString(result);
         }
         return null;
@@ -874,15 +874,16 @@ export class KitRenderer {
     /**
      * Gets the string value used to refer to the element's model
      * @param {HTMLElement} element - the element to be evaluated
+     * @param {string[]} refs - the parent component refs of the element's component
      * @returns {string}
      */
-    static #getModelRef(element) {
+    static async #getModelRef(element, refs) {
         if (element.tagName === KitRenderer.#arrayTag && element.hasAttribute(KitRenderer.#arrayRefAttribute)) {
-            return element.getAttribute(KitRenderer.#arrayRefAttribute);
+            return await KitRenderer.#getAttributeValue(KitRenderer.#arrayRefAttribute, element, refs);
         }
         if (element.tagName === KitRenderer.#componentTag) {
             if (element.hasAttribute(KitRenderer.#modelRefAttribute)) {
-                return element.getAttribute(KitRenderer.#modelRefAttribute);
+                return await KitRenderer.#getAttributeValue(KitRenderer.#modelRefAttribute, element, refs);
             }
             if (element.hasAttribute(KitRenderer.#templatePathAttribute)) {
                 return "model";
@@ -894,11 +895,12 @@ export class KitRenderer {
     /**
      * Gets the string value used to refer to an item in an array
      * @param {HTMLElement} element - the element to be evaluated
+     * @param {string[]} refs - the parent component refs of the element's component
      * @returns {string}
      */
-    static #getItemRef(element) {
+    static async #getItemRef(element, refs) {
         if (element.tagName === KitRenderer.#arrayTag && element.hasAttribute(KitRenderer.#itemRefAttribute)) {
-            return element.getAttribute(KitRenderer.#itemRefAttribute);
+            return await KitRenderer.#getAttributeValue(KitRenderer.#itemRefAttribute, element, refs);
         }
         return null;
     }
@@ -906,11 +908,12 @@ export class KitRenderer {
     /**
      * Gets the string value used to refer to the index of an array item
      * @param {HTMLElement} element - the element to be evaluated
+     * @param {string[]} refs - the parent component refs of the element's component
      * @returns {string}
      */
-    static #getItemIndexRef(element) {
+    static async #getItemIndexRef(element, refs) {
         if (element.tagName === KitRenderer.#arrayTag && element.hasAttribute(KitRenderer.#itemIndexRefAttribute)) {
-            return element.getAttribute(KitRenderer.#itemIndexRefAttribute);
+            return await KitRenderer.#getAttributeValue(KitRenderer.#itemIndexRefAttribute, element, refs);
         }
         return null;
     }
@@ -918,38 +921,43 @@ export class KitRenderer {
     /**
      * Resolves model references and evaluation instructions in a string
      * @param {string} input - the string to be evaluated
-     * @param {KitComponent} component - the component context
+     * @param {string[]} refs - the list of component references
      * @returns {string}
      */
-    static async #resolveModelRefs(input, component) {
+    static async #resolveModelRefs(input, refs) {
+
+        if (!input) {
+            return input;
+        }
 
         const escapeToken = "a07118ed-51f3-4d7e-9d44-ad632b102770";
         let output = input;
 
         // resolve model references (i.e. #model ...)
-        const items = KitRenderer.#getRefs(component);
-        for (const item of items) {
+        if (refs) {
+            for (const item of refs) {
 
-            // process escapes
-            let findString = `\\#${item.ref}`;
-            if (output.includes(findString)) {
-                output = output.replaceAll(findString, `escape-${escapeToken}-escape`);
-            }
-            // get model references
-            findString = `#${item.ref}`;
-            if (output.includes(findString)) {
-                const id = item.component.id;
-                if (item.isIndexRef) {
-                    output = output.replaceAll(findString, `window.kitComponentManager.findComponent(${id}).index`);
+                // process escapes
+                let findString = `\\#${item.ref}`;
+                if (output.includes(findString)) {
+                    output = output.replaceAll(findString, `escape-${escapeToken}-escape`);
                 }
-                else {
-                    output = output.replaceAll(findString, `window.kitComponentManager.findComponent(${id}).model`);
+                // get model references
+                findString = `#${item.ref}`;
+                if (output.includes(findString)) {
+                    const id = item.component.id;
+                    if (item.isIndexRef) {
+                        output = output.replaceAll(findString, `window.kitComponentManager.findComponent(${id}).index`);
+                    }
+                    else {
+                        output = output.replaceAll(findString, `window.kitComponentManager.findComponent(${id}).model`);
+                    }
                 }
-            }
-            // revert escapes
-            findString = `escape-${escapeToken}-escape`;
-            if (output.includes(findString)) {
-                output = output.replaceAll(findString, `#${item.ref}`);
+                // revert escapes
+                findString = `escape-${escapeToken}-escape`;
+                if (output.includes(findString)) {
+                    output = output.replaceAll(findString, `#${item.ref}`);
+                }
             }
         }
 
@@ -981,7 +989,7 @@ export class KitRenderer {
         if (output.includes(findString)) {
             output = output.replaceAll(findString, "}%");
         }
-        
+
         return output;
     }
 
@@ -1020,14 +1028,15 @@ export class KitRenderer {
      * attribute values containing commas or equal signs must be escaped with a backslash
      * example: data-kit-add-attributes="attribute1=1\,2\,3, attribute2=value2" results in attribute1="1,2,3" attribute2="value2"
      * @param {HTMLElement} element - The element to search
+     * @param {string[]} refs - the parent component refs of the element's component
      */
-    static #addAttributes(element) {
+    static async #addAttributes(element, refs) {
         const escapeComma = "74969BBD-E28B-401D-B204-3FC44711F41C";
         const escapeEqualsSign = "E89ABBB0-F57A-4E26-8FC8-23E871C9006E";
         const elementsWithAttributesToAdd = element.querySelectorAll(`[${KitRenderer.#addAttributesAttribute}]`);
         if (elementsWithAttributesToAdd) {
             for (const elementWithAttributesToAdd of elementsWithAttributesToAdd) {
-                let serialAttributes = elementWithAttributesToAdd.getAttribute(KitRenderer.#addAttributesAttribute);
+                let serialAttributes = await KitRenderer.#getAttributeValue(KitRenderer.#addAttributesAttribute, elementWithAttributesToAdd, refs);
                 if (serialAttributes) {
                     serialAttributes = serialAttributes.replaceAll("\\,", escapeComma).replaceAll("\\=", escapeEqualsSign);
                     const attributes = serialAttributes.split(",");
@@ -1054,6 +1063,21 @@ export class KitRenderer {
                 elementWithAttributesToAdd.removeAttribute(KitRenderer.#addAttributesAttribute);
             }
         }
+    }
+
+    /**
+     * Returns the attribute value for the specified attribute name and element and after resolving any component model references
+     * @param {string} attributeName - the name of the attribute
+     * @param {HTMLElement} element - the element to search
+     * @param {string[]} refs - the component references
+     * @returns {string}
+     */
+    static async #getAttributeValue(attributeName, element, refs) {
+        if (element.hasAttribute(attributeName)) {
+            const attributeValue = element.getAttribute(attributeName);
+            return await KitRenderer.#resolveModelRefs(attributeValue, refs);
+        }
+        return null;
     }
 
     ///**
