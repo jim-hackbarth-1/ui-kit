@@ -42,22 +42,26 @@ All that is needed as a prerequisite is a basic understanding of HTML, CSS, and 
 > </head>
 > <body>
 >   <div>
->     <kit-component data-kit-model="{ title: 'HELLO UI-KIT', isEasy: true,  howEasy: [ 'a', 'b', 'c' ] }"
+>     <kit-component data-kit-model="{ 
+>                      title: 'HELLO UI-KIT', 
+>                      isEasy: true,  
+>                      howEasy: [ 'a', 'b', 'c' ] 
+>                    }"
 >                    data-kit-model-ref="model">
 >       <h1>%{#model.title}%</h1>
->         <kit-if data-kit-condition="#model.isEasy">
->           <br />
->           <p>This is as easy as:</p>
->           <kit-array data-kit-array="#model.howEasy"
->                      data-kit-item-ref="item"
->                      data-kit-item-index-ref="i">
->             <div>
->               <kit-if data-kit-condition="#i < #model.howEasy.length - 1">%{#item}%,</kit-if>
->               <kit-if data-kit-condition="#i === #model.howEasy.length - 1">%{#item}%!</kit-if>
->             </div>
->           </kit-array>
->         </kit-if>
->       </kit-component>
+>       <kit-if data-kit-condition="#model.isEasy">
+>         <br />
+>         <p>This is as easy as:</p>
+>         <kit-array data-kit-array="#model.howEasy"
+>                    data-kit-item-ref="item"
+>                    data-kit-item-index-ref="i">
+>           <div>
+>             <kit-if data-kit-condition="#i < #model.howEasy.length - 1">%{#item}%,</kit-if>
+>             <kit-if data-kit-condition="#i === #model.howEasy.length - 1">%{#item}%!</kit-if>
+>           </div>
+>         </kit-array>
+>       </kit-if>
+>     </kit-component>
 >   </div>
 > </body>
 > </html>
@@ -118,7 +122,6 @@ A full reference on the UI-KIT html tags and attributes and Javascript framework
       - [KitComponentType](#reference-javascript-framework-kit-component-type "KitComponentType")
       - [KitDependencyManager](#reference-javascript-framework-kit-dependency-manager "KitDependencyManager")
       - [KitMessenger](#reference-javascript-framework-kit-messenger "KitMessenger")
-      - [KitMutationObserverFactory](#reference-javascript-framework-kit-mutation-observer-factory "KitMutationObserverFactory")
       - [KitNavigator](#reference-javascript-framework-kit-navigator "KitNavigator")
       - [KitRenderer](#reference-javascript-framework-kit-renderer "KitRenderer")
       - [KitResourceManager](#reference-javascript-framework-kit-resource-manager "KitResourceManager")
@@ -521,7 +524,7 @@ Let's add our content.js file.
 > }
 > 
 > class ContentModel {
->     async initialize(componentId) {
+>     async onRenderStart(componentId) {
 >         this.myComponentId = componentId;
 >         this.content = "Here is my content ...";
 >     }
@@ -546,11 +549,11 @@ It expects to find an exported `createModel()` function that returns the compone
 It's up to the developer to define what the `createModel()` function returns.
 In this case, we've defined a ContentModel class and the function returns an instance of that class.
 
-It isn't required, but if the model returned from the `createModel()` function has an async `initialize()` method, as we do in this example, UI-KIT will call that method with the component's auto-generated component id as an argument when it first calls `createModel()` to create the component.  
-In this case, in our `initialize()` method we set two properties on our model: `myComponentId` and `content`.
+It isn't required, but if the model returned from the `createModel()` function has an async `onRenderStart()` method, as we do in this example, UI-KIT will call that method with the component's auto-generated component id as an argument when it first calls `createModel()` to create the component.  
+In this case, in our `onRenderStart()` method we set two properties on our model: `myComponentId` and `content`.
 
 > <span style="color:#FFD700;font-weight:bold;">◊</span> _Note:_  
-> _UI-KIT will also look for an optional `onLoadedInDocument()` method on the model.  If it exists, UI-KIT will call it after the component has been rendered in the document.  See  [Working with models](#reference-javascript-working-with-models "working with models") for more info._
+> _UI-KIT will also look for an optional `onRenderComplete()` method on the model.  If it exists, UI-KIT will call it after the component has been rendered in the document.  See  [Working with models](#reference-javascript-working-with-models "working with models") for more info._
 
 :point_right: _Action: Update content.html_    
 To make use of this javascript code, let's update content.html to reference the model:
@@ -595,11 +598,11 @@ In a subsequent step, we'll extend this to display the current content section b
 
 :point_right: _Action: Update content.js_    
 First, in our content component model class, let's get rid of the "content" property we added earlier and add a "currentSection" property.    
-For now, we'll hard-code currentSection's value to "#section1" within the `initialize()` method.
+For now, we'll hard-code currentSection's value to "#section1" within the `onRenderStart()` method.
 
 > content.js:
 > ```javascript
-> async initialize(componentId) {
+> async onRenderStart(componentId) {
 >   this.myComponentId = componentId;
 >   this.currentSection = "#section1";
 > }
@@ -729,20 +732,21 @@ Second we need to add an `onNavigation()` method that will respond to navigation
 > onNavigation() function:
 > ```javascript
 > onNavigation(url) {      
->   this.initialize(this.myComponentId);
+>   this.currentSection = KitNavigator.getCurrentUrlFragment();
+>   this.loaded = false;
+>   KitRenderer.renderComponent(this.myComponentId);
 > }
 > ```
 
-:point_right: _Action: Update `initialize()` method in content.js_    
-Finally, in the `initialize()` method, instead of hard-coding the current section value, we'll retrieve it from the current url.  We'll also call `KitMessenger.subscribe()` to start listening for navigation events.  
+:point_right: _Action: Update `onRenderStart()` method in content.js_    
+Finally, in the `onRenderStart()` method, instead of hard-coding the current section value, we'll retrieve it from the current url.  We'll also call `KitMessenger.subscribe()` to start listening for navigation events.  
 
-> `initialize()` method:
+> `onRenderStart()` method:
 > ```javascript
-> async initialize(componentId) {
+> async onRenderStart(componentId) {
 >   this.myComponentId = componentId;
 >   this.currentSection = KitNavigator.getCurrentUrlFragment();
 >   KitMessenger.subscribe(KitNavigator.navTopicName, this.myComponentId, this.onNavigation.name);
->   KitRenderer.renderComponent(this.myComponentId);
 > }
 > ```
 
@@ -820,10 +824,10 @@ Update the section 1 part of our content template to make use of our new css loa
 > ```html
 > <kit-if data-kit-condition="#model.currentSection === '#section1' || !#model.currentSection">
 >   <div>Section 1 content</div>
->   <kit-if data-kit-condition="#model.isSection1Loading">
+>   <kit-if data-kit-condition="#model.loading">
 >     <div style="margin:20px;" class="loader"></div>
 >   </kit-if>
->   <kit-if data-kit-condition="!#model.isSection1Loading">
+>   <kit-if data-kit-condition="!#model.loading">
 >     <ul>
 >       <kit-array data-kit-array="#model.section1Items" data-kit-item-ref="item">
 > 	      <li id="%{#item.itemId}%">Name: %{#item.name}%</li>
@@ -837,25 +841,21 @@ We've added our div with `class="loader"` for our loading indicator and wrapped 
 Also, we've wrapped the main content of section 1 in a `<kit-if>` tag so that it is only displayed when `isSection1Loading` is false, meaning it's done loading.
 And note that we've changed from using the `getSection1Items()` method to using a `section1Items` property on the model to get our items array so we'll have to update our Javascript model correspondingly.
 
-:point_right: _Action: Update content.js_    
-Remove the existing `getSection1Items()` method and update `initialize()` to set a `section1Items` property.
+:point_right: _Action: Update content.js - add `loadContent()` method_    
+Remove the existing `getSection1Items()` method and add a `loadContent()` method.
 
-> content.js:
+> content.js - loadContent() method:
 > ```javascript
-> async initialize(componentId) {
->   this.myComponentId = componentId;
->   this.currentSection = KitNavigator.getCurrentUrlFragment();
->   KitMessenger.subscribe(KitNavigator.navTopicName, this.myComponentId, this.onNavigation.name);
+> async loadContent() {
 > 
+>   this.loading = true;
+>   let reRender = false;
 >   if (this.currentSection === "#section1") {
 > 
->     // show state without data (loading)
->     this.section1Items = [];
->     this.isSection1Loading = true;
->     KitRenderer.renderComponent(this.myComponentId);
-> 
->     // get data (simulating a 3-second delay)
+>     // simulate a delay getting data
 >     await new Promise(r => setTimeout(r, 3000));
+> 
+>     // set data
 >     this.section1Items = [
 >       { itemId: 1, name: "Item 1" },
 >       { itemId: 2, name: "Item 2" },
@@ -863,11 +863,33 @@ Remove the existing `getSection1Items()` method and update `initialize()` to set
 >       { itemId: 4, name: "Item 4" },
 >       { itemId: 5, name: "Item 5" }
 >     ];
->     this.isSection1Loading = false;
->   }
+>     reRender = true;
+>   }    
+>   this.loading = false;
+>   this.loaded = true;
 > 
->   // synchronize view after state update
->   KitRenderer.renderComponent(this.myComponentId);
+>   // re-render
+>   if (reRender) {
+>     KitRenderer.renderComponent(this.myComponentId);
+>   }
+> }
+> ```
+
+:point_right: _Action: Update content.js - update `onRenderStart()` method_  
+And now, update `onRenderStart()` to call `loadContent()`.
+
+> content.js - onRenderStart() method:
+> ```javascript
+> async onRenderStart(componentId) {
+>   this.myComponentId = componentId;
+>   this.currentSection = KitNavigator.getCurrentUrlFragment();
+>   if (!this.currentSection) {
+>     this.currentSection = "#section1";
+>   }
+>   KitMessenger.subscribe(KitNavigator.navTopicName, this.myComponentId, this.onNavigation.name);
+>   if (!this.loaded) {
+>     await this.loadContent();
+>   }
 > }
 > ```
 
@@ -1260,8 +1282,8 @@ With the markup above, UI-KIT expects to find an HTML template file at the speci
 
 UI-KIT will attempt to dynamically import the javascript file as a Javascript module. Within this module there are a few expectations specific to UI-KIT:  
 - (Required) UI-KIT expects to find an exported `createModel()` function that returns the model for the component.
-- (Optional) If the object returned by `createModel()` has an async method named `initialize()`, UI-KIT will call that method after the model is created.  
-- (Optional) If the object returned by `createModel()` has an async method named `onLoadedInDocument()`, UI-KIT will call that method after the component's template has been processed and the resulting markup added to the document.  
+- (Optional) If the object returned by `createModel()` has an async method named `onRenderStart()`, UI-KIT will call that method after the model is created.  
+- (Optional) If the object returned by `createModel()` has an async method named `onRenderComplete()`, UI-KIT will call that method after the component's template has been processed and the resulting markup added to the document.  
 
 > Example of a component's javascript file:
 > ```javascript
@@ -1275,21 +1297,21 @@ UI-KIT will attempt to dynamically import the javascript file as a Javascript mo
 > class MyComponentModel {
 > 
 >     // optional
->     async initialize(componentId) {
+>     async onRenderStart(componentId) {
 >         this.componentId = componentId;
 >     }
 > 
 >     // optional
->     async onLoadedInDocument() {
+>     async onRenderComplete() {
 >         const element = KitRenderer.getComponentElement(this.componentId);
 >         alert(element.innerHTML);
 >     }
 > }
 > ```
 
-UI-KIT passes the unique id of the component as input to the `initialize()` method.  
+UI-KIT passes the unique id of the component as input to the `onRenderStart()` method.  
 The component's id can be useful in finding the component's element in the document.  
-UI-KIT will also pass any input provided via the `data-kit-model-input` attribute to the `initialize()` method.
+UI-KIT will also pass any input provided via the `data-kit-model-input` attribute to the `onRenderStart()` method.
 
 > Passing input to a component's model using the `data-kit-model-input` attribute:
 > ```html
@@ -1299,7 +1321,7 @@ UI-KIT will also pass any input provided via the `data-kit-model-input` attribut
 > </kit-component>
 > ```
 > ```javascript
-> async initialize(componentId, modelInput) {
+> async onRenderStart(componentId, modelInput) {
 >   this.componentId = componentId;
 >   this.prop1 = modelInput.prop1;
 >   this.prop2 = modelInput.prop2;
@@ -1352,10 +1374,26 @@ The items in this section document the capabilities of the UI-KIT framework clas
 ##### Properties
 
 > ```javascript
+> /** @type {KitComponent[]} */
+> children;
+> ```
+> An array of child components of this component.
+
+&nbsp;
+
+> ```javascript
 > /** @type {KitComponentType} */
 > componentType;
 > ```
 >The type of component.  See [KitComponentType](#reference-javascript-framework-kit-component-type "KitComponentType").
+
+&nbsp;
+
+> ```javascript
+> /** @type {boolean} */
+> hasTemplatePath;
+> ```
+> Indicates whether the component's template comes from an external path.
 
 &nbsp;
 
@@ -1411,7 +1449,7 @@ The items in this section document the capabilities of the UI-KIT framework clas
 > /** @type {any} */
 > modelInput;
 > ```
-> A javascript object to be passed as input to the component model's `initialize()` method.
+> A javascript object to be passed as input to the component model's `onRenderStart()` method.
 
 &nbsp;
 
@@ -1428,6 +1466,14 @@ The items in this section document the capabilities of the UI-KIT framework clas
 > parent;
 > ```
 > The parent component of this component.
+
+&nbsp;
+
+> ```javascript
+> /** @type {boolean} */
+> rendered;
+> ```
+> Indicates whether the component has been rendered.
 
 &nbsp;
 
@@ -1485,6 +1531,14 @@ The items in this section document the capabilities of the UI-KIT framework clas
 &nbsp;
 
 > ```javascript
+> /** @type {boolean} */
+> hasTemplatePath;
+> ```
+> Indicates whether the component's template comes from an external path.
+
+&nbsp;
+
+> ```javascript
 > /** @type {number} */
 > index;
 > ```
@@ -1531,7 +1585,7 @@ The items in this section document the capabilities of the UI-KIT framework clas
 > /** @type {any} */
 > modelInput;
 > ```
-> A javascript object to be passed as input to the component model's `initialize()` method.
+> A javascript object to be passed as input to the component model's `onRenderStart()` method.
 
 &nbsp;
 
@@ -1615,14 +1669,6 @@ This class is used by UI-KIT to manage browser dependencies (such as the window 
 &nbsp;
 
 > ```javascript
-> /** @returns {KitMutationObserverFactory} */
-> static getMutationObserverFactory() 
-> ```
-> Gets the mutation observer factory
-
-&nbsp;
-
-> ```javascript
 > /** @returns {KitResourceManager} */
 > static getResourceManager()
 > ```
@@ -1666,14 +1712,6 @@ This class is used by UI-KIT to manage browser dependencies (such as the window 
 &nbsp;
 
 > ```javascript
-> /** @param {KitMutationObserverFactory} mutationObserverFactory - The mutation observer factory */
-> static setMutationObserverFactory(mutationObserverFactory)
-> ```
-> Sets the mutation observer factory
-
-&nbsp;
-
-> ```javascript
 > /** @param {KitResourceManager} resourceManager - The resource manager */
 > static setResourceManager(resourceManager)
 > ```
@@ -1702,7 +1740,7 @@ This class is used by UI-KIT to manage browser dependencies (such as the window 
 > }
 > 
 > class MyComponentModel {
->   async initialize(componentId) {
+>   async onRenderStart(componentId) {
 >     this.componentId = componentId;
 >     KitMessenger.subscribe("Topic1", this.componentId, this.onTopic1Message.name);
 >   }
@@ -1743,27 +1781,6 @@ This class is used by UI-KIT to manage browser dependencies (such as the window 
 &nbsp;
 
 ---
-#### KitMutationObserverFactory <span id="reference-javascript-framework-kit-mutation-observer-factory" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span></sup>
-`KitMutationObserverFactory` is a factory class for creating mutation observers.
-
-&nbsp;
-
-##### Methods
-
-&nbsp;
-
-> ```javascript
-> /** 
->   @param {MutationCallback} callback
->   @returns {MutationObserver}
-> */
-> createMutationObserver(callback)
-> ```
-> Creates a new mutation observer
-
-&nbsp;
-
----
 #### KitNavigator <span id="reference-javascript-framework-kit-navigator" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-javascript-framework "framework classes")</span></sup>
 `KitNavigator` facilitates navigation functionality.
 This class uses [KitMessenger](#reference-javascript-framework-kit-messenger "KitMessenger") to publish navigation events.
@@ -1777,7 +1794,7 @@ This class uses [KitMessenger](#reference-javascript-framework-kit-messenger "Ki
 > }
 > 
 > class MyComponentModel {
->   async initialize(componentId) {
+>   async onRenderStart(componentId) {
 >     this.componentId = componentId;
 >     KitMessenger.subscribe(KitNavigator.navTopicName, this.componentId, this.onNavigation.name);
 >   }
