@@ -68,22 +68,6 @@ export class KitDependencyManager {
     }
 
     /**
-     * Gets the mutation observer factory
-     * @returns {KitMutationObserverFactory}
-     */
-    static getMutationObserverFactory() {
-        return KitDependencyManager.get(KitDependencyManager.#mutationObserverFactory);
-    }
-
-    /**
-     * Sets the mutation observer factory
-     * @param {KitMutationObserverFactory} mutationObserverFactory - The mutation observer factory
-     */
-    static setMutationObserverFactory(mutationObserverFactory) {
-        KitDependencyManager.set(KitDependencyManager.#mutationObserverFactory, mutationObserverFactory);
-    }
-
-    /**
      * Get a dependency
      * @param {string} key - The dependency key used to find the dependency
      * @returns {any}
@@ -130,9 +114,6 @@ export class KitDependencyManager {
     /** @type {string} */
     static #resourceManager = "resource-manager";
 
-    /** @type {string} */
-    static #mutationObserverFactory = "mutation-observer-factory";
-
     /** @type {{key: string, value: any}[]} */
     static #dependencies = [];
 
@@ -174,20 +155,6 @@ export class KitResourceManager {
      */
     async import(moduleName) {
         return await import(moduleName);
-    }
-}
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/** Factory class for creating mutation observers */
-export class KitMutationObserverFactory {
-
-    /**
-     * Creates a new mutation observer
-     * @param {MutationCallback} callback
-     * @returns {MutationObserver}
-     */
-    createMutationObserver(callback) {
-        return new MutationObserver(callback);
     }
 }
 
@@ -365,6 +332,9 @@ export class KitComponentOptions {
     /** @type {string} */
     template;
 
+    /** @type {boolean} */
+    hasTemplatePath;
+
     /** @type {any} */
     model;
 
@@ -411,6 +381,7 @@ export class KitComponent {
             options.template = options.template.replace(/<!--.*?-->/sg, ""); // remove comments
         }
         this.template = options.template;
+        this.hasTemplatePath = options.hasTemplatePath;
         this.model = KitComponent.#getModel(options);
         this.modelInput = options.modelInput;
         this.parent = options.parent;
@@ -423,6 +394,45 @@ export class KitComponent {
         KitComponent.#validateRef(options.indexRef, this);
         this.indexRef = options.indexRef;
         this.index = options.index;
+        this.rendered = false;
+        this.children = [];
+    }
+
+    onRenderStart() {
+        this.rendered = false;
+        if (this.model && typeof this.model.onRenderStart === "function") {
+            if (this.model.onRenderStart.constructor.name !== "AsyncFunction") {
+                const modelName = this.model.constructor.name;
+                const msg = `onRenderStart(componentId, modelInput) function must be async. model: ${modelName}, component id: ${this.id}`;
+                throw new Error(msg);
+            }
+            this.model.onRenderStart(this.id, this.modelInput);
+        }
+    }
+
+    onRenderComplete() {
+        this.#updateRenderState();
+    }
+
+    onChildRenderComplete() {
+        this.#updateRenderState();
+    }
+
+    #updateRenderState() {
+        if (!this.rendered && this.children.every(child => child.rendered)) {
+            this.rendered = true;
+            if (this.model && typeof this.model.onRenderComplete === "function") {
+                if (this.model.onRenderComplete.constructor.name !== "AsyncFunction") {
+                    const modelName = this.model.constructor.name;
+                    const msg = `onRenderComplete() function must be async. model: ${modelName}, component id: ${this.id}`;
+                    throw new Error(msg);
+                }
+                this.model.onRenderComplete();
+            }
+            if (this.parent) {
+                this.parent.onChildRenderComplete();
+            }
+        }
     }
 
     /**
@@ -512,7 +522,7 @@ export class KitComponent {
             if (component.modelRef === ref || component.indexRef === ref) {
                 return true;
             }
-            if (component.parent) {
+            if (component.parent && !component.hasTemplatePath) {
                 return KitComponent.#hasRef(ref, component.parent);
             }
         }
@@ -527,9 +537,6 @@ export class KitRenderer {
     /** Renders the document body */
     static async renderDocument() {
         const appDocument = KitDependencyManager.getDocument();
-        const mutationObserverFactory = KitDependencyManager.getMutationObserverFactory();
-        KitRenderer.#mutationObserver = mutationObserverFactory.createMutationObserver(KitRenderer.#mutationCallback);
-        KitRenderer.#mutationObserver.observe(appDocument.body, { characterData: false, childList: true, subtree: true });     
         const options = {
             template: appDocument.body.innerHTML
         };
@@ -560,6 +567,7 @@ export class KitRenderer {
 
         // get template
         const component = KitComponent.find(componentId);
+        component.onRenderStart();
         const temp = appDocument.createElement("temp");
         temp.innerHTML = component.template;
 
@@ -569,7 +577,7 @@ export class KitRenderer {
         selector = `${KitRenderer.#ifTag} :is(${tags}), ${KitRenderer.#arrayTag} :is(${tags}), ${KitRenderer.#componentTag} :is(${tags})`;
         const nestedChildComponentElements = [...temp.querySelectorAll(selector)];
         const topChildComponentElements = allChildComponentElements.filter(e => !nestedChildComponentElements.includes(e));
-        let childComponents = [];
+        component.children = [];
         const refs = KitRenderer.#getRefs(component);
         for (const childComponentElement of topChildComponentElements) {
             let templatePath = null;
@@ -580,16 +588,17 @@ export class KitRenderer {
             const options = {
                 componentType: KitRenderer.#getComponentType(childComponentElement),
                 template: await KitRenderer.#getTemplate(childComponentElement, templatePath),
+                hasTemplatePath: templatePath ? true : false,
                 model: await KitRenderer.#getModel(childComponentElement, refs),
                 modelInput: await KitRenderer.#getModelInput(childComponentElement, refs),
-                parent: templatePath ? null : component,
+                parent: component,
                 modelRef: await KitRenderer.#getModelRef(childComponentElement, refs),
                 itemRef: await KitRenderer.#getItemRef(childComponentElement, refs),
                 itemIndexRef: await KitRenderer.#getItemIndexRef(childComponentElement, refs)
             };
             const childComponent = KitRenderer.#createComponentForElement(options, childComponentElement);
             childComponentElement.innerHTML = "";
-            childComponents.push(childComponent);
+            component.children.push(childComponent);
         }
 
         // set inner html content
@@ -598,10 +607,12 @@ export class KitRenderer {
         // resolve wrapped attributes
         await KitRenderer.#addAttributes(componentElement, refs);
 
+        // mark component as rendered
+        component.onRenderComplete();
+
         // render child components
         let itemIndex = 0;
-        let arrayItemComponents = [];
-        for (const childComponent of childComponents) {
+        for (const childComponent of component.children) {
             switch (childComponent.componentType) {
             case KitComponentType.ConditionalComponent:
                 if (childComponent.model) {
@@ -609,9 +620,11 @@ export class KitRenderer {
                 }
                 break;
             case KitComponentType.ArrayComponent:
+                childComponent.children = [];
                 for (const arrayItem of childComponent.model) {
                     const options = {
                         template: childComponent.template,
+                        hasTemplatePath: false,
                         model: arrayItem,
                         parent: childComponent,
                         modelRef: childComponent.itemRef,
@@ -620,7 +633,7 @@ export class KitRenderer {
                     };
                     const arrayItemElement = appDocument.createElement(KitRenderer.#componentTag);
                     const arrayItemComponent = KitRenderer.#createComponentForElement(options, arrayItemElement);
-                    arrayItemComponents.push(arrayItemComponent);
+                    childComponent.children.push(arrayItemComponent);
                     arrayItemElement.setAttribute(
                         KitRenderer.#modelAttribute, `window.kitComponentManager.findComponent(${childComponent.id}).model[${itemIndex}]`);
                     arrayItemElement.setAttribute(
@@ -629,7 +642,8 @@ export class KitRenderer {
                     childComponentElement.append(arrayItemElement);
                     itemIndex++;
                 }
-                for (const arrayItemComponent of arrayItemComponents) {
+                childComponent.onRenderComplete();
+                for (const arrayItemComponent of childComponent.children) {
                     KitRenderer.renderComponent(arrayItemComponent.id);
                 }
                 break;
@@ -638,7 +652,7 @@ export class KitRenderer {
             }
         }
     }
- 
+
     /**
      * Gets the element associated with a component
      * @param {number} componentId - The id of the component
@@ -694,35 +708,6 @@ export class KitRenderer {
     /** @type {{path: string, template: string}[]} */
     static #templateCache = [];
 
-    /** @type {MutationObserver}  */
-    static #mutationObserver;
-
-
-    /**
-     * Callback function that runs when a mutation occurs
-     * @param {MutationRecord[]} mutationsList
-     */
-    static #mutationCallback(mutationsList) {
-        let renderedComponentIds = mutationsList
-            .filter(m =>
-                m.target.hasAttribute("data-kit-component-id")
-                && m.type === "childList"
-                && m.addedNodes.length > 0)
-            .map(m => m.target.getAttribute("data-kit-component-id"));
-        renderedComponentIds = [...new Set(renderedComponentIds)];
-        for (const componentId of renderedComponentIds) {
-            const component = KitComponent.find(componentId);
-            if (component && component.model && typeof component.model.onLoadedInDocument === "function") {
-                if (component.model.onLoadedInDocument.constructor.name !== "AsyncFunction") {
-                    const modelName = component.model.constructor.name;
-                    const msg = `onLoadedInDocument() function must be async. model: ${modelName}, component id: ${componentId}`;
-                    throw new Error(msg);
-                }
-                component.model.onLoadedInDocument();
-            }
-        }
-    }
-
     /**
      * Creates a new KitComponent for an element
      * @param {KitComponentOptions} options - the options for creating the KitComponent
@@ -733,15 +718,6 @@ export class KitRenderer {
         const component = new KitComponent(options);
         KitComponent.add(component);
         element.setAttribute(KitRenderer.#componentIdAttribute, component.id);
-        if (component.model && typeof component.model.initialize === "function") {
-            if (component.model.initialize.constructor.name !== "AsyncFunction") {
-                const modelName = component.model.constructor.name;
-                const id = component.id;
-                const msg = `initialize(componentId, modelInput) function must be async. model: ${modelName}, component id: ${id}`;
-                throw new Error(msg);
-            }
-            component.model.initialize(component.id, component.modelInput);
-        }
         return component;
     }
 
@@ -1007,7 +983,7 @@ export class KitRenderer {
             if (component.indexRef) {
                 refs.push({ ref: component.indexRef, isIndexRef: true, component: component });
             }
-            if (component.parent) {
+            if (component.parent && !component.hasTemplatePath) {
                 // recurse
                 addRef(component.parent, refs);
             }
@@ -1091,7 +1067,7 @@ export class KitRenderer {
             eval(`(async () => { result = ${input}; })();`);
         }
         return await result;
-    } 
+    }
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1106,7 +1082,6 @@ export class KitStartup {
         KitDependencyManager.setDocument(document);
         KitDependencyManager.setConsole(console);
         KitDependencyManager.setResourceManager(new KitResourceManager());
-        KitDependencyManager.setMutationObserverFactory(new KitMutationObserverFactory());
 
         // navigator
         KitNavigator.initialize();
