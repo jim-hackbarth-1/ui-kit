@@ -618,6 +618,10 @@ export class KitRenderer {
                 if (childComponent.model) {
                     KitRenderer.renderComponent(childComponent.id);
                 }
+                else
+                {
+                    childComponent.onRenderComplete();
+                }
                 break;
             case KitComponentType.ArrayComponent:
                 childComponent.children = [];
