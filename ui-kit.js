@@ -611,7 +611,6 @@ export class KitRenderer {
         component.onRenderComplete();
 
         // render child components
-        let itemIndex = 0;
         for (const childComponent of component.children) {
             switch (childComponent.componentType) {
             case KitComponentType.ConditionalComponent:
@@ -625,6 +624,7 @@ export class KitRenderer {
                 break;
             case KitComponentType.ArrayComponent:
                 childComponent.children = [];
+                let itemIndex = 0;
                 for (const arrayItem of childComponent.model) {
                     const options = {
                         template: childComponent.template,
