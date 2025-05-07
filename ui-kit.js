@@ -539,7 +539,7 @@ export class KitRenderer {
 
     /** Renders the document body */
     static async renderDocument() {
-        const appDocument = KitDependencyManager.getDocument();
+        const appDocument = KitDependencyManager.getDocument(); 
         const options = {
             template: appDocument.body.innerHTML
         };
@@ -620,8 +620,7 @@ export class KitRenderer {
                 if (childComponent.model) {
                     KitRenderer.renderComponent(childComponent.id);
                 }
-                else
-                {
+                else {
                     childComponent.onRenderComplete();
                 }
                 break;
@@ -646,7 +645,9 @@ export class KitRenderer {
                     arrayItemElement.setAttribute(
                         KitRenderer.#modelRefAttribute, childComponent.itemRef);
                     const childComponentElement = appDocument.querySelector(`[${KitRenderer.#componentIdAttribute}="${childComponent.id}"]`);
-                    childComponentElement.append(arrayItemElement);
+                    if (childComponentElement) {
+                        childComponentElement.append(arrayItemElement);
+                    }
                     itemIndex++;
                 }
                 childComponent.onRenderComplete();
@@ -659,7 +660,7 @@ export class KitRenderer {
             }
         }
     }
-
+ 
     /**
      * Gets the element associated with a component
      * @param {number} componentId - The id of the component
@@ -930,10 +931,10 @@ export class KitRenderer {
                 if (output.includes(findString)) {
                     const id = item.component.id;
                     if (item.isIndexRef) {
-                        output = output.replaceAll(findString, `window.kitComponentManager.findComponent(${id}).index`);
+                        output = output.replaceAll(findString, `window.kitComponentManager.findComponent(${id})?.index`);
                     }
                     else {
-                        output = output.replaceAll(findString, `window.kitComponentManager.findComponent(${id}).model`);
+                        output = output.replaceAll(findString, `window.kitComponentManager.findComponent(${id})?.model`);
                     }
                 }
                 // revert escapes
@@ -1074,7 +1075,7 @@ export class KitRenderer {
             eval(`(async () => { result = ${input}; })();`);
         }
         return await result;
-    }
+    } 
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
