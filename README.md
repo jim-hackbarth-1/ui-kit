@@ -306,26 +306,31 @@ You should now see a page with 3 headings:
 
 This is a good start, but let's add some CSS styling so that each component's appearance better suits its function.   
 
-:point_right: _Action: Add heading.css_  
-In the folder for the header component, add a css file called heading.css.
+:point_right: _Action: Add style tag to heading component template_  
+In the heading component html template, add a style tag:
 
-> heading.css:
-> ```css
-> @scope (#heading) {
+> heading.html:
+> ```html
+> <style>
+>   @scope (#heading) {
 >     :scope {
->         position: fixed;
->         width: 100vw;
->         height: 60px;
->         top: 0;
->         left: 0;
->         display: flex;
->         border-bottom:1px solid black;
->         background-color: silver;
+>       position: fixed;
+>       width: 100vw;
+>       height: 60px;
+>       top: 0;
+>       left: 0;
+>       display: flex;
+>       border-bottom:1px solid black;
+>       background-color: silver;
 >     }
 >     h2 {
->         padding: 10px;
+>       padding: 10px;
 >     }
-> }
+>   }
+> </style>
+> <div id="heading">
+>   <h2>Hello UI-KIT!</h2>
+> </div>
 > ```
 
 This fixes the position of the heading component to the top left of the page and gives it a background color.
@@ -335,58 +340,42 @@ This fixes the position of the heading component to the top left of the page and
 > Setting the scope to the id of the top element in the component's template limits the css rules to the heading component.
 > Using this pattern helps to isolate the css rules for each component and makes the css easier to manage._
 
-:point_right: _Action: Add reference to heading.css_  
-Now we need to add a reference to this css file in heading.html:
-
-> heading.html:
-> ```html
-> <div id="heading">
->   <link rel="stylesheet" href="/components/heading/heading.css" />
->   <h2>Hello UI-KIT!</h2>
-> </div>
-> ```
-
 We'll do something similar for the navigation component.  
 
-:point_right: _Action: Add navigation.css_  
-Add a css file named navigation.css to the navigation component folder.
-
-> navigation.css:
-> ```css
-> @scope (#navigation) {
->     :scope {
->         position: fixed;
->         left: 0;
->         width: 150px;
->         top: 60px;
->         bottom: 0;
->         border-right:1px solid black;
->         background-color: silver;
->     }
->     h2, div {
->     	padding: 10px;
->     }
-> }
-> ```
-
-:point_right: _Action: Add reference to navigation.css_  
-And refer to this css file in navigation.html:
+:point_right: _Action: Add style tag to navigation component template_  
+Update navigation.html with the following style tag:
 
 > navigation.html:
 > ```html
+> <style>
+>   @scope (#navigation) {
+>     :scope {
+>       position: fixed;
+>       left: 0;
+>       width: 150px;
+>       top: 60px;
+>       bottom: 0;
+>       border-right:1px solid black;
+>       background-color: silver;
+>     }
+>     h2, div {
+>       padding: 10px;
+>     }
+>   }
+> </style>
 > <div id="navigation">
->   <link rel="stylesheet" href="/components/navigation/navigation.css" />
 >   <h2>Navigation</h2>
 > </div>
 > ```
 
 This fixes the position of the navigation component to the left of the page and gives it a background.
 
-:point_right: _Action: Add content.css_  
-Finally, we need to fix up the content area style so the header and navigation panels don't cover up the content.
+:point_right: _Action: Add style tag to content component template_  
+Finally, we need to fix up the content area template so the header and navigation panels don't cover up the content.
 
-> content.css:
-> ```css
+> content.html:
+> ```html
+> <style>
 > @scope (#content) {
 >     :scope {
 >         margin-top:60px;
@@ -394,36 +383,11 @@ Finally, we need to fix up the content area style so the header and navigation p
 > 	      padding: 10px;
 >     }
 > }
-> ```
-
-:point_right: _Action: Add reference to content.css_  
-And refer to this css file in content.html:
-
-> content.html:
-> ```html
+> </style>
 > <div id="content">
->   <link rel="stylesheet" href="/components/content/content.css" />
 >   <h2>Content area</h2>
 > </div>
 > ```
-
-Ok, at this point your folder structure should look like this:
-
->```folder structure
-> > hello-ui-kit
->   > components
->     > heading
->       - heading.css
->       - heading.html
->     > navigation
->       - navigation.css
->       - navigation.html
->     > content
->       - content.css
->       - content.html
->   - index.html
->   - ui-kit.js
->```
 
 :point_right: _Action: Save all changes and refresh browser_  
 After saving your changes and refreshing your browser, you should see a page with clear content sections for heading, navigation, and content.
@@ -774,13 +738,14 @@ It's often the case with web applications that it takes some time to get the dat
 :point_right: _Action: Update content.css_    
 First, let's borrow an animated css loading indicator from the web and add it to our styles for the content component.
 
-> content.css:
-> ```css
+> content.html:
+> ```html
+> <style>
 > @scope (#content) {
 >   :scope {
->     margin-top:60px;
->     margin-left:150px;
-> 	  padding: 10px;
+>       margin-top:60px;
+>       margin-left:150px;
+> 	    padding: 10px;
 >   }
 > 
 >   /* From https://css-loaders.com/ */
@@ -813,7 +778,7 @@ First, let's borrow an animated css loading indicator from the web and add it to
 >     100%{transform: rotate(-180deg) translateX(25px)}
 >   }
 > }
-> ```
+> </style>
 
 I borrowed the css for this loader from [css-loaders.com](https://css-loaders.com/ "css-loaders.com"). It looks like it's designed to be used with a div element with class "loader" so we'll need to update our html template.
 
@@ -1182,30 +1147,14 @@ If needed, model references may be escaped by prefixing with a backslash.
 ## CSS reference <span id="reference-css" /><sup><span style="font-size:8pt;">[top](#toc "table of contents") | [..^](#reference-html "html reference")</span></sup>
 There are no special css class names or rules specific to UI-KIT.  
 
-But there is a convention that can be followed to scope css styles to a specific component so that everything having to do with a component can be found in one folder location.
-
-> Example component folder structure:
-> ```folder structure
-> > my-component
->   - my-component.css
->   - my-component.html
->   - my-component.js
-> ```
+But there is a convention that can be followed to scope css styles to a specific component so that everything having to do with a component can be found in one location.
 
 To scope css styles to a component, we can follow a convention of specifying a class on the top-most element in the template and referencing that class using the `@scope` attribute in the css file.
 
 > Example component html file:
 >
 > ```html
-> <div class="my-component">
->   <link rel="stylesheet" href="/components/my-component/my-component.css" />
->   <h2>My Component</h2>
->   <div class="my-class">My class content</div>
-> </div>
-> ```
-
-> Example css file:
-> ```css
+> <style>
 > @scope (.my-component) {
 >  :scope {
 >    /* styles for the top-most element in the component (.my-component) */
@@ -1214,6 +1163,12 @@ To scope css styles to a component, we can follow a convention of specifying a c
 >   /* styles for elements with class "my-class" (and that are also a descendant of .my-component) */
 >  }
 > }
+> </style>
+> <div class="my-component">
+>   <link rel="stylesheet" href="/components/my-component/my-component.css" />
+>   <h2>My Component</h2>
+>   <div class="my-class">My class content</div>
+> </div>
 > ```
 
 > <span style="color:#FFD700;font-weight:bold;">◊</span> _Tip:_   
