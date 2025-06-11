@@ -1452,6 +1452,17 @@ The items in this section document the capabilities of the UI-KIT framework clas
 
 > ```javascript
 > /**
+>   @param {string} eventName - The name of the event
+>   @param {any} listener - The callback method to be called when the event is raised
+> */
+> addEventListener(eventName, listener)
+> ```
+> Adds a listener for events raised by this component.
+
+&nbsp;
+
+> ```javascript
+> /**
 >   @param {number} id - The id of the KitComponent
 >   @returns {KitComponent}
 > */
@@ -1466,6 +1477,17 @@ The items in this section document the capabilities of the UI-KIT framework clas
 > static remove(id)
 > ```
 > Removes a KitComponent from the global components array.
+
+&nbsp;
+
+> ```javascript
+> /**
+>   @param {string} eventName - The name of the event
+>   @param {any} listener - The listener to be removed
+> */
+> removeEventListener(eventName, listener)
+> ```
+> Removes a listener for events raised by this component.
 
 &nbsp;
 
