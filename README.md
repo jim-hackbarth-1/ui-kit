@@ -413,7 +413,7 @@ There are two ways to define a component with a javascript model:
 The first method is often used for simpler components where the parent component has access to all the facts needed to create the model.
 The "Hello UI-KIT! HTML" code example markup at the top of this document uses this method:
 
-> using the `data-kit-model` attribute:
+> using the `kit-model` attribute:
 > ```html
 > <div kit-element 
 >      kit-model="{ title: 'HELLO UI-KIT', isEasy: true, howEasy: [ 'a', 'b', 'c' ] }">
@@ -769,12 +769,13 @@ Update the section 1 part of our content template to make use of our new css loa
 > section 1 of content.html:
 > ```html
 > ...
+> <div id="section-1-container" kit-if="#model.currentSection === '#section1' || !#model.currentSection">
 >     <div>Section 1 content</div>
 > 
->     <!-- loading indicator -->
+>      <!-- loading indicator -->
 >     <div kit-if="#model.loading">
 >       <div style="margin:20px;" class="loader"></div>
->     </div>
+>      </div>
 > 
 >     <!-- content when loaded -->
 >     <ul kit-if="!#model.loading" kit-array="#model.section1Items ?? []" kit-array-item-alias="item">
@@ -785,9 +786,11 @@ Update the section 1 part of our content template to make use of our new css loa
 > ...
 > ```
 
-We've added our div with `class="loader"` for our loading indicator and wrapped in in a div element with a `kit-if` attribute so that it is only displayed when `loading` is true.
-Also, we've added a `kit-if` attribute so that it is only displayed when `loading` is false, meaning it's done loading.
-And note that we've changed from using the `getSection1Items()` method to using a `section1Items` property on the model to get our items array so we'll have to update our Javascript model correspondingly.
+We've made a few changes.  
+First, we've added an id attribute "section-1-container".  We'll use that later in the javascript model.  
+Second, we've added a `kit-if` condition that shows our loader when `#model.loading` is true.  
+Third, we've added a `kit-if` condition that only shows our data list when `#model.loading` is not true (meaning we're done loading).  
+Finally, we've changed from using the `getSection1Items()` method to using a `section1Items` property on the model to get our items array so we'll have to update our Javascript model correspondingly.
 
 :point_right: _Action: Update content.js - add `loadContent()` method_    
 There are multiple ways to accomplish this loading behavior.  
@@ -795,44 +798,39 @@ For this example, we will remove the existing `getSection1Items()` method, add a
 
 > content.js - loadContent() method:
 > ```javascript
-> async loadContent() {
+>     async loadContent() {
+>       if (this.currentSection === "#section1") {
+>         this.loading = true;
 > 
->   this.loading = true;
->   let reRender = false;
->   if (this.currentSection === "#section1") {
+>         // simulate a delay getting data (3 seconds)
+>         await new Promise(r => setTimeout(r, 3000));
 > 
->     // simulate a delay getting data (3 seconds)
->     await new Promise(r => setTimeout(r, 3000));
-> 
->     // set data
->     ContentModel.data = [
->       { itemId: 1, name: "Item 1" },
->       { itemId: 2, name: "Item 2" },
->       { itemId: 3, name: "Item 3" },
->       { itemId: 4, name: "Item 4" },
->       { itemId: 5, name: "Item 5" }
->     ];
->     this.section1Items = ContentModel.data;
->     reRender = true;
->   }    
->   this.loading = false;
->   ContentModel.loaded = true;
-> 
->   // re-render
->   if (reRender) {
->     await UIKit.renderer.renderElement(this.kitElement);
->   }
-> }
+>         // set data
+>         this.section1Items = [
+>           { itemId: 1, name: "Item 1" },
+>           { itemId: 2, name: "Item 2" },
+>           { itemId: 3, name: "Item 3" },
+>           { itemId: 4, name: "Item 4" },
+>           { itemId: 5, name: "Item 5" }
+>         ];
+>         this.loading = false;
+>         
+>         // re-render section 1
+>         const section1 = this.kitElement.querySelector("#section-1-container");
+>         if (section1) {
+>           await UIKit.renderer.renderElement(section1);
+>         }
+>       }    
+>     }
 > ```
 
 :point_right: _Action: Update content.js - update `init()` method_  
-And now, add the static data properties and update `init()` to call `loadContent()`.
+And now, we will call `loadContent()` from the `init()` method without awaiting the result.  
+This allows the framework to render the initial "loading" content while the component is getting data.  
+The `loadContent()` method will re-render section 1 after it has acquired the data.
 
 > content.js - init() method:
 > ```javascript
-> 
->     static loaded = false;
->     static data = [];
 > 
 >     async init(kitElement, kitObjects) {
 >       this.kitElement = kitElement;
@@ -845,11 +843,7 @@ And now, add the static data properties and update `init()` to call `loadContent
 >         callback: this.onNavigation.name
 >       };
 >       UIKit.messenger.subscribe(KitNavigator.NavTopic, subscriber);
->       this.loading = false;
->       this.section1Items = ContentModel.data;
->       if (!ContentModel.loaded) {
->         this.loadContent();
->       }
+>       this.loadContent(); // no await
 >    }
 > ```
 
@@ -1097,7 +1091,7 @@ If needed, model references may be escaped by prefixing with a backslash.
 
 > escaped model reference example:
 > ```html
-> <div kit-element data-obj-my-model="myModel:{ prop1: 'abc', prop2: 'def' }">
+> <div kit-element kit-obj-my-model="myModel:{ prop1: 'abc', prop2: 'def' }">
 >   <div>prop1 = %{#myModel.prop1}%</div>
 >   <div>my reference to prop 1 is \#myModel.prop1</div>
 > </div>
